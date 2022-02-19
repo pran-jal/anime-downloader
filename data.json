@@ -1,0 +1,33 @@
+{
+	"@context":"https:\/\/schema.org",
+	"@graph":[{
+		"@context":"https:\/\/schema.org",
+		"@type":"TVEpisode",
+		"url":"https://animeheaven.pro/watch/food-wars-the-third-plate-lV8Z-episode-2/",
+		"name":"Food Wars! The Third Plate Episode 2 English subbed",
+		"episodeNumber":"2",
+		"position":"2",
+		"dateModified":"2021-09-20",
+		"thumbnailUrl":"https://static.bunnycdn.ru/i/cache/images/2018/04/e41527f545f1ebb7cdbdae4dce024f4a.jpg",
+		"director": "J.C.Staff",		"datePublished": "2017-10-04",		"potentialAction":{
+			"@type":"WatchAction",
+			"target":"https://animeheaven.pro/watch/food-wars-the-third-plate-lV8Z-episode-2/"
+		},
+		"video":{
+			"@type":"VideoObject",
+			"url":"https://animeheaven.pro/watch/food-wars-the-third-plate-lV8Z-episode-2/",
+			"name":"Food Wars! The Third Plate Episode 2 English subbed",
+			"uploadDate":"2021-09-20",
+			"thumbnailUrl":"https://static.bunnycdn.ru/i/cache/images/2018/04/e41527f545f1ebb7cdbdae4dce024f4a.jpg",
+			"description":"AnimeHeaven - watch Food Wars! The Third Plate - Food Wars! The Third Plate Episode 2 anime online free and more animes online in high quality. WATCH... animeheaven.pro",
+			"videoQuality":"HD",
+			"embedUrl": "https://vidstream.pro/e/RLJQM5L3ZP59?domain=animeheaven.pro",
+			"potentialAction":{
+				"@type":"WatchAction",
+				"target":"https://animeheaven.pro/watch/food-wars-the-third-plate-lV8Z-episode-2/"
+			}
+		},
+		"inLanguage":"ja-JP",
+		"subtitleLanguage":"en-US"
+	}]
+}
