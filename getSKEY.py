@@ -3,7 +3,8 @@ import headers
 import jsonread
 
 
-url = jsonread.url()
-skey = r.get(url=url, headers=headers)
-
-print(skey.text)
+def getSKEY() :
+    url = jsonread.url()
+    skey = r.get(url=url, headers=headers)
+    
+    print(skey.text)

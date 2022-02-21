@@ -14,6 +14,7 @@ class MyHTMLParser(HTMLParser):
         except:
             1
 
+
 def JsonWrite() :
     url = "https://animeheaven.pro/watch/food-wars-the-third-plate-lV8Z-episode-8/"
     site = r.get(url).text
@@ -21,3 +22,4 @@ def JsonWrite() :
     parser.feed(str(site))
 
 
+JsonWrite()
