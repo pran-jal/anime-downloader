@@ -1,15 +1,7 @@
 import json
-import JsonWrite
+import embedUrl
 
 def url():
-    f = open('data.json')
-    
-    try :
-        return json.load(f)['@graph'][0]['video']['embedUrl']
+    return embedUrl.embedUrl()
 
-    except Exception as e:
-        print(" ERROR : ", e)
-    
-    finally :
-        f.close()
 

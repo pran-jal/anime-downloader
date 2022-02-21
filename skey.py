@@ -1,6 +1,5 @@
 import requests as r
 import headers
-import jsonread
 from html.parser import HTMLParser
 
 class MyHTMLParser(HTMLParser):
@@ -17,8 +16,7 @@ class MyHTMLParser(HTMLParser):
         if data.startswith("window.skey") :
             self.element['key'] = data.split("'")[1]
 
-def getSKEY() :
-    url = jsonread.url()
+def getSKEY(url) :
     skey = r.get(url, headers=headers.headers).text
     parser = MyHTMLParser()
     parser.feed(skey)
