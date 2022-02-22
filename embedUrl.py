@@ -6,9 +6,9 @@ import json
 class MyHTMLParser(HTMLParser):
 
     def __init__(self, *, convert_charrefs = False) :
+        super().__init__(convert_charrefs=convert_charrefs)
         self.reset()
         self.link = {}
-        super().__init__(convert_charrefs=convert_charrefs)
 
     def handle_data(self, data) :
         try:

@@ -5,7 +5,3 @@ headers = {
     'Connection': 'keep-alive',
     'Referer': 'https://animeheaven.pro/',
 }
-
-
-
-#Host: pvjok.vidstream.pro
