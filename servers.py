@@ -38,4 +38,4 @@ def embedUrl(url=None) :
     # print(parser.link)
 
     parser.close()
-    return parser.link, parser.episodes
+    return [parser.link, parser.episodes]
