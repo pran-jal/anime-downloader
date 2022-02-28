@@ -18,7 +18,6 @@ class MyHTMLParser(HTMLParser):
             self.title-=1
 
     def handle_data(self, data) :
-        print(data)
         if self.title>0 :
             self.element['name'] = data
             

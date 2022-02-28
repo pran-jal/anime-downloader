@@ -4,4 +4,6 @@ test.py
 
 data.json
 data.txt
+
 *.mp4
+*.pyc

@@ -1,20 +1,20 @@
 import requests as r
 import servers
+import old.skey as skey
+import old.m3u8_downloader as m3u8_downloader
 
 def download_episodes(url):
 
     details = servers.embedUrl(url)
     total_no_episodes = details[1].pop()
     servers_list = details[0]
-    print(total_no_episodes)
-    print(servers_list)
-    try :
-        url = servers_list[0][:-2:]
-        for i in range(1, 1+int(total_no_episodes, 10)):
-            new_url = url +str(i)+'/'
-            print(new_url)
-    except:
-        print("vidstream not working")
+    keys = skey.getSKEY(servers_list[0])
 
+
+    info = servers_list[0].split('/e/')
+    listurl = info[0]+'/info/'+info[1]+'&skey='+keys['key']
+
+
+    print(m3u8_downloader.m3u8_downloader(url, keys['name']))
 
 download_episodes(input())
