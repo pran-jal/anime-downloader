@@ -7,12 +7,21 @@ class MyHTMLParser(HTMLParser):
         super().__init__(convert_charrefs=convert_charrefs)
         self.reset()
         self.element = {}
+        self.title = 0
     
     def handle_starttag(self, tag, attrs):
         if tag.lower() == 'title' :
-            self.element['name'] = tag
+            self.title += 1
+
+    def handle_endtag(self, tag: str):
+        if tag.lower() == 'title' and self.title>0:
+            self.title-=1
 
     def handle_data(self, data) :
+        print(data)
+        if self.title>0 :
+            self.element['name'] = data
+            
         if data.startswith("window.skey") :
             self.element['key'] = data.split("'")[1]
 
@@ -21,3 +30,6 @@ def getSKEY(url) :
     parser = MyHTMLParser()
     parser.feed(skey)
     return parser.element
+
+
+# FOR mcloud change host to -> 'Host': 'mcloud.to'
