@@ -45,3 +45,8 @@ def download(url, no) :
     episode = source[i::][::-1]+quality[0]
 
     print(m3u8_downloader.m3u8_downloader(episode, no))
+
+url = input("URL : ")
+name = input("Name : ")
+print("Downloading : %s" %url)
+download(url=url, no=name)
