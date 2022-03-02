@@ -2,8 +2,5 @@ test.py
 main.py
 # series.py
 
-data.json
-data.txt
-
 *.mp4
 *.pyc
