@@ -34,8 +34,5 @@ def embedUrl(url=None) :
     site = r.get(url).text
     parser = MyHTMLParser()
     parser.feed(site)
-    # print(parser.episodes.pop())
-    # print(parser.link)
-
     parser.close()
     return [parser.link, parser.episodes]
