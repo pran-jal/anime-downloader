@@ -1,6 +1,7 @@
 import requests as r
 import servers
 import skey
+import nameverfier
 import downloader
 import headers
 
@@ -21,6 +22,7 @@ def download_episode(url):
             break
 
     episode = episode[i::][::-1]+'hls/1080/1080.m3u8'
-    return episode
+    name = nameverfier.nameverifier(keys['name'])
+    print(downloader.downloader(episode, name, capture_output=False))
 
-print(download_episode(input()))
+download_episode(input())

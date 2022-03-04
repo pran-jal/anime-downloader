@@ -20,25 +20,25 @@ class reader(parser):
                         if i.lower() == 'data-embed':
                             self.link.append(j)
 
-        if tag.lower() == 'ul' and attrs[0][0] == 'class' and attrs[0][1] == 'nav':
+        elif tag.lower() == 'ul' and attrs[0][0] == 'class' and attrs[0][1] == 'nav':
             self.recording += 1
 
-        if tag.lower() == 'title' :
+        elif tag.lower() == 'title' :
             self.title += 1
                 
     def handle_endtag(self, tag ) :
         if tag.lower() == 'ul' and self.recording>0:
             self.recording -= 1
         
-        if tag.lower() == 'title' and self.title>0:
+        elif tag.lower() == 'title' and self.title>0:
             self.title-=1
 
     def handle_data(self, data):
         if self.recording>0:
             self.episodes.append(data) if ( data !='\n' and data != '\n ') else None
 
-        if self.title>0 :
+        elif self.title>0 :
             self.element['name'] = data
             
-        if data.startswith("window.skey") :
+        elif data.startswith("window.skey") :
             self.element['key'] = data.split("'")[1]

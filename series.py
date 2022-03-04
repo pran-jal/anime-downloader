@@ -1,8 +1,10 @@
 from html.parser import HTMLParser as parser
 import requests as r
-import skey
 import threading
+import skey
+import headers
 import servers
+import downloader
 import concurrent.futures
 
 url = input()
@@ -32,21 +34,34 @@ for i in urls :
         embedurls.append(executor.submit(servers.servers, i).result()[0][0])
 print(embedurls)
 
-print()
-skeys = []
-for i in embedurls :
-    skeys.append(skey.getSkey(i))
-for i in skeys :
-    print(i['name'], i['key'])
 
-print()
+skey = skey.getSkey(embedurls[0])['key']
+print(skey)
 
+for i in embedurls:
+    info = i.split('/e/')
+    listurl = info[0]+'/info/'+info[1]+'&skey='+skey
+    headers.headers['Referer'] = i
+    embedurls[embedurls.index(i)] = r.get(listurl, headers=headers.headers).json()['media']['sources'][1]['file']
+print(embedurls)
 
-skeys_1 = []
-for i in embedurls :
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        skeys_1.append(executor.submit(skey.getSkey, i).result())
-for i in skeys_1:
-    print(i['name'], i['key'])
+episodes = []
+for i in embedurls:
+   episodes.append(i[:-9:]+'hls/1080/1080.m3u8')
+print(episodes)
 
+threads = []
 
+for i in episodes :
+    name = urls[episodes.index(i)].split('/watch/')[1][:-1:]
+    t = threading.Thread(target=downloader.downloader, args=(i, name, True))
+    threads.append(t)
+    t.start()
+
+for i in threads:
+    i.join()
+
+for i in threads:
+    while i.is_alive():
+        continue
+    
