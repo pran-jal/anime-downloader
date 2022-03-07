@@ -2,8 +2,8 @@ import requests as r
 import headers
 import htmlreader
 
-
 def getSkey(url) :
+    # headers.headers['Host'] = url.split('/')[2]               why ?
     skey = r.get(url, headers=headers.headers).text
     read = htmlreader.reader()
     read.feed(skey)
@@ -11,3 +11,5 @@ def getSkey(url) :
     return read.element
 
 # FOR mcloud change host to -> 'Host': 'mcloud.to'
+if __name__ == '__main__' :
+    print(getSkey(input()))

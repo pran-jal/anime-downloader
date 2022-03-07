@@ -1,7 +1,7 @@
-from html.parser import HTMLParser as parser
 import requests as r
 import threading
 import skey
+import embed_varify
 import headers
 import servers
 import downloader
@@ -16,23 +16,17 @@ for i in range(len(url)) :
 url = url[i::][::-1]
 
 urls = []
-for i in range(1, 9):
+for i in range(1, 10):
     urls.append(url+f"{i}/")
 print(urls)
 
 embedurls = []
-""" threads = []
-for i in urls :
-    t = threading.Thread(target=servers.servers, args=(i,))
-    threads.append(t)
-    t.start()
-    embedurls.append([0][0]) 
-print(embedurls) """
-
 for i in urls :
     with concurrent.futures.ThreadPoolExecutor() as executor:
         embedurls.append(executor.submit(servers.servers, i).result()[0][0])
 print(embedurls)
+
+embedurls = embed_varify.varify_urls(embedurls)
 
 
 skey = skey.getSkey(embedurls[0])['key']

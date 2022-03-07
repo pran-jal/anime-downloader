@@ -1,19 +1,20 @@
 import requests as r
+import embed_varify
 import servers
 import skey
 import nameverfier
 import downloader
 import headers
 
-def download_episode(url):
+def download_episode(url, capture_output=False):
 
     required = servers.servers(url)    # [ [vidstream url, mcloud url]  [ no of episodes ] ]
-    embedurl = required[0]
-    total_no_episodes = required[1].pop()
-    keys = skey.getSkey(embedurl[0])        # skey same for both servers
-    info = embedurl[0].split('/e/')
+    embedurls = required[0]
+    embedurls = embed_varify.varify_urls(embedurls)
+    keys = skey.getSkey(embedurls[0])        # skey same for both servers
+    info = embedurls[0].split('/e/')
     listurl = info[0]+'/info/'+info[1]+'&skey='+keys['key']
-    headers.headers['Referer'] = embedurl[0]
+    headers.headers['Referer'] = embedurls[0]
     lists = r.get(listurl, headers=headers.headers)
     episode = lists.json()['media']['sources'][1]['file']
     episode = episode[::-1]
@@ -23,6 +24,7 @@ def download_episode(url):
 
     episode = episode[i::][::-1]+'hls/1080/1080.m3u8'
     name = nameverfier.nameverifier(keys['name'])
-    print(downloader.downloader(episode, name, capture_output=False))
+    return downloader.downloader(episode, name, capture_output)
 
-download_episode(input())
+if __name__ == '__main__' :
+    print(download_episode(input()))
