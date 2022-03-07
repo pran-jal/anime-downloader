@@ -5,12 +5,12 @@ class reader(parser):
     def __init__(self, *, convert_charrefs = False) :
         super().__init__(convert_charrefs=convert_charrefs)
         self.reset()
-        self.link = []
         self.recording = 0
+        self.link = []
         self.episodes = []
 
-        self.element = {}
         self.title = 0
+        self.element = {}
 
     def handle_starttag(self, tag, attrs):
         if tag.lower() == 'a':
