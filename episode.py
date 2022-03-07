@@ -2,7 +2,7 @@ import requests as r
 import embed_varify
 import servers
 import skey
-import nameverfier
+import namevarifier
 import downloader
 import headers
 
@@ -23,7 +23,7 @@ def download_episode(url, capture_output=False):
             break
 
     episode = episode[i::][::-1]+'hls/1080/1080.m3u8'
-    name = nameverfier.nameverifier(keys['name'])
+    name = namevarifier.namevarifier(keys['name'])
     return downloader.downloader(episode, name, capture_output)
 
 if __name__ == '__main__' :

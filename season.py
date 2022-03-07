@@ -3,7 +3,7 @@ from turtle import down
 import requests as r
 import servers
 import skey
-import nameverfier
+import namevarifier
 import downloader
 import headers
 import embed_varify
@@ -22,23 +22,26 @@ class Downloader():
         for i in range(len(episode)) :
             if episode[i] == '/' :
                 break
-
         episode = episode[i::][::-1]+'hls/1080/1080.m3u8'
-        name = url.split('/watch/')[1]
+        name = namevarifier.namevarifier(url.split('/watch/')[1][:-1:])
         self.result = downloader.downloader(episode, name, capture_output)
 
 url = input()
 
+print("Getting Required files..........")
 required = servers.servers(url)
 total_episodes = int(required[1].pop())+1
 embedurls = embed_varify.varify_urls(required[0])
 keys = skey.getSkey(embedurls[0])        # skey same for both servers
+print("Required files Ready............")
 
 url = url[::-1]
 for i in range(len(url)) :
     if url[i] == '-' :
         break
 url = url[i::][::-1]
+
+print("Starting Downloading............")
 
 urls = []
 for i in range(1, total_episodes):
@@ -47,11 +50,11 @@ for i in range(1, total_episodes):
 threads = []
 results = []
 for i in urls:
-        d = Downloader()
-        t= threading.Thread(target = d.download_episode, args= (i, keys, True) )
-        t.start()
-        threads.append(t)
-        results.append(d.result)
+    d = Downloader()
+    t= threading.Thread(target = d.download_episode, args= (i, keys, True) )
+    t.start()
+    threads.append(t)
+    results.append(d)
 
 for t in threads:
     t.join()
@@ -59,5 +62,7 @@ for t in threads:
 for t in threads:
     while t.is_alive():
         continue
-    print(results[threads.index(t)])
+
+for t in results:    
+    print(t.result)
 

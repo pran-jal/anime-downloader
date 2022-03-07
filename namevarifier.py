@@ -1,4 +1,4 @@
-def nameverifier(name):
+def namevarifier(name):
     for i in name:
         if i not in 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_.' :
             j = name.index(i)
@@ -9,4 +9,4 @@ def nameverifier(name):
     return name
 
 if __name__ == "__main__":
-    print(nameverifier(input()))
+    print(namevarifier(input()))
