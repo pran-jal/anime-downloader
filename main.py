@@ -88,7 +88,7 @@ def varify_urls(urls) :
 
 def getSkey(url) :
     # headers.headers['Host'] = url.split('/')[2]               why ?
-    skey = r.get(url, headers=headers.headers).text
+    skey = r.get(url, headers=headers).text
     read = reader()
     read.feed(skey)
     read.close()
@@ -117,8 +117,8 @@ class Downloader():
             if episode[i] == '/' :
                 break
         episode = episode[i::][::-1]+'hls/1080/1080.m3u8'
-        name = namevarifier.namevarifier(url.split('/watch/')[1][:-1:])
-        self.result = downloader.downloader(episode, name, capture_output)
+        name = namevarifier(url.split('/watch/')[1][:-1:])
+        self.result = downloader(episode, name, capture_output)
 
 url = input("URL : ")
 print("Getting Required files..........")
