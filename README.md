@@ -13,3 +13,4 @@ Run main.py and paste url
 *    all in one
 *    Url filtering for uncensored episodes not working
 *    Not working for series of uncensored episodes
+*    Add progress bar for downloading
