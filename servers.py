@@ -7,3 +7,6 @@ def servers(url) :
     read.feed(site)
     read.close()
     return [read.link, read.episodes]
+
+if __name__ == '__main__':
+    print(servers(input()))

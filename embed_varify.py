@@ -3,8 +3,8 @@ import headers
 
 def varify_urls(urls) :
     for url in urls:
-        if r.get(url, headers=headers.headers).status_code != 200:
-            headers.headers['Host'] = url.split('/')[2]
+        if r.head(url).status_code != 200:
+            # headers.headers['Host'] = url.split('/')[2]                   # not required anymore why ?
             urls[urls.index(url)] = r.head(url).headers['Location']
     return urls
 

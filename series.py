@@ -6,27 +6,19 @@ import headers
 import servers
 import downloader
 import concurrent.futures
+import urls
 
 url = input()
 
-url = url[::-1]
-for i in range(len(url)) :
-    if url[i] == '-' :
-        break
-url = url[i::][::-1]
-
-urls = []
-for i in range(1, 10):
-    urls.append(url+f"{i}/")
+urls = urls.generator(url, 10)
 print(urls)
 
 embedurls = []
 for i in urls :
     with concurrent.futures.ThreadPoolExecutor() as executor:
         embedurls.append(executor.submit(servers.servers, i).result()[0][0])
-print(embedurls)
-
 embedurls = embed_varify.varify_urls(embedurls)
+print(embedurls)
 
 
 skey = skey.getSkey(embedurls[0])['key']
@@ -41,7 +33,7 @@ print(embedurls)
 
 episodes = []
 for i in embedurls:
-   episodes.append(i[:-9:]+'hls/1080/1080.m3u8')
+   episodes.append(i[:-9:]+'hls/720/720.m3u8')
 print(episodes)
 
 threads = []

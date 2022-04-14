@@ -3,7 +3,7 @@ import headers
 import htmlreader
 
 def getSkey(url) :
-    # headers.headers['Host'] = url.split('/')[2]               why ?
+    headers.headers['Host'] = url.split('/')[2]               
     skey = r.get(url, headers=headers.headers).text
     read = htmlreader.reader()
     read.feed(skey)

@@ -5,6 +5,7 @@ import skey
 import namevarifier
 import downloader
 import headers
+import resolution
 
 def download_episode(url, capture_output=False):
 
@@ -17,12 +18,12 @@ def download_episode(url, capture_output=False):
     headers.headers['Referer'] = embedurls[0]
     lists = r.get(listurl, headers=headers.headers)
     episode = lists.json()['media']['sources'][1]['file']
+    res = resolution.resolutions(episode)
     episode = episode[::-1]
     for i in range(len(episode)) :
         if episode[i] == '/' :
             break
-
-    episode = episode[i::][::-1]+'hls/1080/1080.m3u8'
+    episode = episode[i::][::-1]+res[0]
     name = namevarifier.namevarifier(keys['name'])
     return downloader.downloader(episode, name, capture_output)
 
