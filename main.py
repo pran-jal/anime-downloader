@@ -98,6 +98,23 @@ def servers(url) :
     read.close()
     return [read.link, read.episodes]
 
+def urls_generator(url, total_episodes):
+    url = url[::-1]
+    end = None
+    for i in range(len(url)) :
+        if url[i] == '-' :
+            if url[:i:][::-1] == 'uncen/':
+                end = '-uncen/'
+            else:
+                if end != '-uncen/':
+                    end = '/'
+                break 
+    url = url[i::][::-1]
+    urls = []
+    for i in range(1, total_episodes+1):
+        urls.append( url+str(i)+end )
+    return urls
+
 def varify_urls(urls) :
     for url in urls:
         if r.head(url).status_code != 200:
@@ -117,14 +134,13 @@ def getSkey(url) :
 def downloader(url, name, dir_name, capture_output=False) :
     print("downloading ", name)
     s = 'cd %s; ffmpeg -i "%s" -c copy %s.mp4' %(dir_name, url, name)
-    print(s)
     if subprocess.run(["powershell", "-command", s], capture_output=capture_output).returncode == 0:
         return (f"{name} downloaded successfully")
     else:
         return (f"downloading  {name} failed")
 
 class Downloader():
-    def download_episode(self, url, keys, dir_name):
+    def download_episode(self, url, keys, dir_name, capture_output=False):
         required = servers(url)    # [ [vidstream url, mcloud url]  [ no of episodes ] ]
         embedurls = required[0]
         embedurls = varify_urls(embedurls)
@@ -140,7 +156,7 @@ class Downloader():
                 break
         episode = episode[i::][::-1]+res[0]
         name = namevarifier(url.split('/watch/')[1][:-1:])
-        self.result = downloader(episode, name, dir_name)
+        self.result = downloader(episode, name, dir_name, capture_output)
 
 url = input("URL : ")
 
@@ -153,7 +169,7 @@ keys = getSkey(embedurls[0])             # skey same for both servers
 print("Required files Ready............")
 print("\nTotal number of Episodes to download: ", total_episodes)
 
-all_urls = urls.generator(url, total_episodes)
+all_urls = urls_generator(url, total_episodes)
 dir_name = all_urls[0].split('/watch/')[1][:-1:].split('episode')[0][:-1:]
 print("Downloading to: ", dir_name)
 if not os.path.exists(dir_name):
@@ -164,7 +180,7 @@ results = []
 print("Starting Downloading............")
 for i in all_urls:
         d = Downloader()
-        t = threading.Thread(target = d.download_episode, args= (i, keys, dir_name) )
+        t = threading.Thread(target = d.download_episode, args= (i, keys, dir_name, True) )
         t.start()
         threads.append(t)
         results.append(d)

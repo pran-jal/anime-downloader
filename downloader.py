@@ -1,8 +1,8 @@
 import subprocess
 
-def downloader(url, name, capture_output=False) :
+def downloader(url, name, dir_name, capture_output=False) :
     print("downloading ", name)
-    s = 'ffmpeg -i "%s" -c copy %s.mp4' %(url, name)
+    s = 'cd %s; ffmpeg -i "%s" -c copy %s.mp4' %(dir_name, url, name)
     if subprocess.run(["powershell", "-command", s], capture_output=capture_output).returncode == 0:
         return (f"{name} downloaded successfully")
     else:
