@@ -111,8 +111,8 @@ def urls_generator(url, total_episodes):
                 break 
     url = url[i::][::-1]
     urls = []
-    for i in range(1, total_episodes+1):
-        urls.append( url+str(i)+end )
+    for episode in total_episodes:
+        urls.append( url + episode + end )
     return urls
 
 def varify_urls(urls) :
@@ -162,12 +162,12 @@ url = input("URL : ")
 
 print("Getting Required files..........")
 required = servers(url)
-total_episodes = len(required[1])-2
+total_episodes = required[1][2:]
 embedurls = varify_urls(required[0])
 keys = getSkey(embedurls[0])             # skey same for both servers
 
 print("Required files Ready............")
-print("\nTotal number of Episodes to download: ", total_episodes)
+print("\nTotal number of Episodes to download: ", len(total_episodes))
 
 all_urls = urls_generator(url, total_episodes)
 dir_name = all_urls[0].split('/watch/')[1][:-1:].split('episode')[0][:-1:]
