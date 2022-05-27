@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(1, './src')
 import htmlreader
 import requests as r
 

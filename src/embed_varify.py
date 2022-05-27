@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(1, './src')
 import requests as r
 import headers
 
