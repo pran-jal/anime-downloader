@@ -20,8 +20,3 @@ Run main.py and paste url
 *    check server|resolution availability and switch ot other server|resolution for perticular server|resolution given by user
 *    change multithreading to 20 at a time at max
 *    Add option to download episode or not if already one exist of same name ( use -y )
-
-
-https://user-images.githubusercontent.com/72604669/168474787-542dffc9-6ed7-489a-bc8a-e1da1bf99808.mp4
-
-
