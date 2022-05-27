@@ -25,6 +25,10 @@ class MyHTMLParser(HTMLParser):
             self.element['key'] = data.split("'")[1]
 
 def getSKEY(url) :
+    """ 
+    Deprecated.
+    Website does not use skey now.
+    """
     skey = r.get(url, headers=headers.headers).text
     parser = MyHTMLParser()
     parser.feed(skey)

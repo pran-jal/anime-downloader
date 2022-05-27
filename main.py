@@ -2,12 +2,15 @@ import requests as r
 import embedUrl
 import skey
 import sources
-import threading
 import json
 import m3u8_downloader
 import lists
 
 def download(url, no) :
+    """
+    Deprecated
+    Website does not use skey anymore.
+    """
     embedurl = embedUrl.embedUrl(url)
     print("embedUrl generated")
    

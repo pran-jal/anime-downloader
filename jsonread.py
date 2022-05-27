@@ -1,5 +1,5 @@
 import json
-import old.embedUrl as embedUrl
+import embedUrl
 
 def url():
     return embedUrl.embedUrl()
