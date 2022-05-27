@@ -1,4 +1,7 @@
 test.py
+bar.py
 
 *.mp4
 *.pyc
+*.exe
+*.log
