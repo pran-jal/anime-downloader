@@ -2,6 +2,7 @@ import threading
 import requests as r
 import servers
 import skey
+import get_info
 import resolution
 import urls
 import namevarifier
@@ -10,15 +11,16 @@ import headers
 import embed_varify
 
 class Downloader():
-    def download_episode(self, url, keys, capture_output=False):
+    def download_episode(self, url, capture_output=False):
         required = servers.servers(url)    # [ [vidstream url, mcloud url]  [ no of episodes ] ]
         embedurls = required[0]
         embedurls = embed_varify.varify_urls(embedurls)
         info = embedurls[0].split('/e/')
-        listurl = info[0]+'/info/'+info[1]+'&skey='+keys['key']
+        keys = get_info.info_key(embedurls[0])
+        listurl = info[0]+'/info/'+ keys
         headers.headers['Referer'] = embedurls[0]
         lists = r.get(listurl, headers=headers.headers)
-        episode = lists.json()['media']['sources'][1]['file']
+        episode = lists.json()['data']['media']['sources'][1]['file']
         res = resolution.resolutions(episode)
         episode = episode[::-1]
         for i in range(len(episode)) :
@@ -44,7 +46,7 @@ results = []
 print("Starting Downloading............")
 for i in all_urls:
     d = Downloader()
-    t= threading.Thread(target = d.download_episode, args= (i, keys, True) )
+    t= threading.Thread(target = d.download_episode, args= (i, True) )
     t.start()
     threads.append(t)
     results.append(d)
@@ -56,6 +58,6 @@ for t in threads:
     while t.is_alive():
         continue
 
-for t in results:    
-    print(t.result)
+for d in results:    
+    print(d.result)
 

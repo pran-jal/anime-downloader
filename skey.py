@@ -3,6 +3,10 @@ import headers
 import htmlreader
 
 def getSkey(url) :
+    """ 
+    obsolete
+    Website does not use skey now.
+    """
     headers.headers['Host'] = url.split('/')[2]               
     skey = r.get(url, headers=headers.headers).text
     read = htmlreader.reader()

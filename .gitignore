@@ -2,3 +2,5 @@ test.py
 
 *.mp4
 *.pyc
+*.log
+*.exe
