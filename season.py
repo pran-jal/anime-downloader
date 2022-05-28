@@ -1,7 +1,6 @@
 import threading
 import requests as r
 import servers
-import skey
 import get_info
 import resolution
 import urls
