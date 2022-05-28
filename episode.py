@@ -1,7 +1,6 @@
 import requests as r
 import embed_varify
 import servers
-import skey
 import namevarifier
 import downloader
 import headers
@@ -16,7 +15,7 @@ def download_episode(url, capture_output=False):
     keys = skey.getSkey(embedurls[0])        # skey same for both servers
     info = embedurls[0].split('/e/')
     key = get_info.info_key(embedurls[0])
-    listurl = info[0]+'/info/'+ key
+    listurl = info[0] + '/info/' + key
     headers.headers['Referer'] = embedurls[0]
     lists = r.get(listurl, headers=headers.headers)
     episode = lists.json()['data']['media']['sources'][1]['file']
