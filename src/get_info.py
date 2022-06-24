@@ -1,11 +1,19 @@
+import time
 from selenium import webdriver
 import requests
 import re
+import headers
+
 
 def get_key(url):
+    """
+    Obsolete. AGAIN :(
+    """
     domain = url.split('/e/')[0]
-    url = '/e/' + url.split('/e/')[1]
-    a = requests.get(domain+url).text
+    # url = '/e/' + url.split('/e/')[1]
+    a = requests.get(url, headers=headers.headers).text
+    print(a)
+    infoKey = None
     for line in a.split('\n'):
         if line.startswith('<script type="text/javascript" src="/assets/vidstream/cache/scripts.js?v='):
             script_src = line.split('src="')[1][:-11:]
@@ -17,13 +25,14 @@ def get_key(url):
     
             options = webdriver.FirefoxOptions()
             options.add_argument('-headless')
-            browser = webdriver.Firefox(executable_path='./webdriver/geckodriver.exe')
-            browser.get(domain + url)
+            browser = webdriver.Firefox(executable_path='./webdriver/geckodriver.exe', options=options, service_log_path='./webdriver/geckodriver.log')
+            browser.get('https://animeheaven.pro/watch/im-quitting-heroing-DMex-episode-1/')
+            time.sleep(20)
             browser.execute_script(new_script)
             infoKey = browser.switch_to.alert.text
+            # print(infoKey)
             browser.switch_to.alert.accept()
             browser.quit()
-            
     return infoKey
 
 if __name__ == '__main__':

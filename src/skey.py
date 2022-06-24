@@ -7,7 +7,7 @@ def getSkey(url) :
     Get Skey for a episode. Skey works same for whole
     season.
 
-    Decripated.
+    obsolete.
     ( episode or season not use this anymore.)
     """
     headers.headers['Host'] = url.split('/')[2]               

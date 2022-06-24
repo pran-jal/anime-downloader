@@ -3,4 +3,5 @@ headers = {
     'Connection': 'keep-alive',
     'origin': 'https://animeheaven.pro',
     'Referer': 'https://animeheaven.pro/',
+    'Host': 'vizcloud.cloud',
 }

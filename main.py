@@ -1,9 +1,6 @@
 import os
-import urls
 import threading
 import subprocess
-import resolution
-import downloader
 import requests as r
 from html.parser import HTMLParser as parser
 
@@ -131,6 +128,10 @@ def getSkey(url) :
     read.close()
     return read.element
 
+def resolutions(list_url):
+    resos = r.get(list_url)
+    return [i for i in resos.text.split('\n') if i.startswith('H') or i.startswith('h') ]
+
 def downloader(url, name, dir_name, capture_output=False) :
     print("downloading ", name)
     s = 'cd %s; ffmpeg -i "%s" -c copy %s.mp4' %(dir_name, url, name)
@@ -148,8 +149,8 @@ class Downloader():
         listurl = info[0]+'/info/'+info[1]+'&skey='+keys['key']
         # headers['Referer'] = embedurls[0]
         lists = r.get(listurl, headers=headers)
-        episode = lists.json()['media']['sources'][1]['file']
-        res = resolution.resolutions(episode)
+        episode = lists.json()['data']['media']['sources'][1]['file']
+        res = resolutions(episode)
         episode = episode[::-1]
         for i in range(len(episode)) :
             if episode[i] == '/' :
@@ -158,39 +159,44 @@ class Downloader():
         name = namevarifier(url.split('/watch/')[1][:-1:])
         self.result = downloader(episode, name, dir_name, capture_output)
 
-url = input("URL : ")
+def main(url=None):
+    if url == None:
+        url = input("URL : ")
 
-print("Getting Required files..........")
-required = servers(url)
-total_episodes = required[1][2:]
-embedurls = varify_urls(required[0])
-keys = getSkey(embedurls[0])             # skey same for both servers
+    print("Getting Required files..........")
+    required = servers(url)
+    total_episodes = required[1][2:]
+    embedurls = varify_urls(required[0])
+    keys = getSkey(embedurls[0])             # skey same for both servers
 
-print("Required files Ready............")
-print("\nTotal number of Episodes to download: ", len(total_episodes))
+    print("Required files Ready............")
+    print("\nTotal number of Episodes to download: ", len(total_episodes))
 
-all_urls = urls_generator(url, total_episodes)
-dir_name = all_urls[0].split('/watch/')[1][:-1:].split('episode')[0][:-1:]
-print("Downloading to: ", dir_name)
-if not os.path.exists(dir_name):
-    os.mkdir(dir_name)
+    all_urls = urls_generator(url, total_episodes)
+    dir_name = all_urls[0].split('/watch/')[1][:-1:].split('episode')[0][:-1:]
+    print("Downloading to: ", dir_name)
+    if not os.path.exists(dir_name):
+        os.mkdir(dir_name)
 
-threads = []
-results = []
-print("Starting Downloading............")
-for i in all_urls:
-        d = Downloader()
-        t = threading.Thread(target = d.download_episode, args= (i, keys, dir_name, True) )
-        t.start()
-        threads.append(t)
-        results.append(d)
+    threads = []
+    results = []
+    print("Starting Downloading............")
+    for i in all_urls:
+            d = Downloader()
+            t = threading.Thread(target = d.download_episode, args= (i, keys, dir_name, True) )
+            t.start()
+            threads.append(t)
+            results.append(d)
 
-for t in threads:
-    t.join()
+    for t in threads:
+        t.join()
 
-for t in threads:
-    while t.is_alive():
-        continue
+    for t in threads:
+        while t.is_alive():
+            continue
 
-for t in results:    
-    print(t.result)
+    for t in results:    
+        print(t.result)
+
+if __name__ == '__main__' :
+    main('https://animeheaven.pro/watch/ascendance-of-a-bookworm-season-3-dub-j3j0-episode-1/')
