@@ -9,9 +9,9 @@ def get_json(urls: list, server_name = None):
     option = ChromeOptions()
     option.headless = True
     option.accept_insecure_certs = True
-    browser = webdriver.Firefox(executable_path = 'webdriver\geckodriver', service_log_path='./webdriver/animeheaven_json.log')
+    browser = webdriver.Firefox(executable_path = 'webdriver\geckodriver', service_log_path='./webdriver/animeheaven_json.log', options = option)
     # browser = uc.Chrome(executable_path='webdriver\chromedriver', service_log_path='./webdriver/animeheaven_json.log', options=option )
-    json_list = []
+    json_list = {}
     for url in urls:
         print('getting: ', url)
         browser.get(url)
@@ -22,16 +22,19 @@ def get_json(urls: list, server_name = None):
         while True:
             for req in browser.requests:
                 if req.url.startswith('https://vizcloud.store/mediainfo/'):
-                    print(req.params)
-                    print(req.headers)
+                    # print(req.params)
+                    # print(req.headers)
                     a = r.get(req.url, params=req.params, headers=req.headers)
                     if a.status_code == 200:
-                        json_list.append({urls.index(url):a.json()})
+                        # json_list.append({urls.index(url):a.json()['data']['media']['sources']})
+                        json_list[url] = a
                         found = 1
             if found:
                 break
             browser.refresh()
             time.sleep(5)
+    browser.quit()
+    return json_list
 
 if __name__ == '__main__':
     print(get_json('https://animeheaven.pro/watch/the-fruit-of-evolution-before-i-knew-it-my-life-had-it-made-KDnP-episode-2/'))

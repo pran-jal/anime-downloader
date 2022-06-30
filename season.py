@@ -1,15 +1,15 @@
 import os
 import time
 import threading
-import requests as r
+# import requests as r
 import src.urls as urls
 import src.headers as headers
 import src.servers as servers
-import src.get_info as get_info
+# import src.get_info as get_info
 import src.resolution as resolution
 import src.namevarifier as namevarifier
 import src.progress_bar as progress_bar
-import src.embed_varify as embed_varify
+# import src.embed_varify as embed_varify
 import src.json_server as json_server
 
 class Downloader():
@@ -17,9 +17,7 @@ class Downloader():
         self.epi_url = url
         self.name = ''
     
-    def download_episode(self, dir_name):
-        lists = json_server.get_json(self.epi_url)
-        print(lists)
+    def download_episode(self, dir_name, lists):
         episode = lists.json()['data']['media']['sources'][1]['file']
         res = resolution.resolutions(episode)
         episode = episode[::-1]
@@ -36,7 +34,6 @@ def main(url=None):
     if url == None:
         url = input("URL : ")
 
-    print("Getting Required files..........")
     required = servers.servers(url)
     total_episodes = len(required[1])-2
 
@@ -48,12 +45,13 @@ def main(url=None):
     if not os.path.exists(dir_name):
         os.mkdir(dir_name)
 
+    lists = json_server.get_json(all_urls)
     threads = []
     results = []
 
     for url in all_urls:
         d = Downloader(url)
-        t = threading.Thread(target = d.download_episode, args=(dir_name,))
+        t = threading.Thread(target = d.download_episode, args=(dir_name, lists[url]))
         t.start()
         threads.append(t)
         results.append(d)
