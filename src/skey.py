@@ -8,7 +8,7 @@ def getSkey(url) :
     season.
 
     obsolete.
-    ( episode or season not use this anymore.)
+    ( episode or season not use this anymore. )
     """
     headers.headers['Host'] = url.split('/')[2]               
     skey = r.get(url, headers=headers.headers).text

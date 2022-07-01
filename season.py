@@ -67,7 +67,7 @@ def main(url=None):
             for t in range(total_in_downloading):
                 success = f"{results[t].name} downloaded successfully\r"
                 fail = f"downloading {results[t].name} failed\r"
-                new_result = results[t].bar.result
+                new_result = results[t].bar.progress
                 if new_result in [success, fail] and new_result != result[t]:
                     wait_for += 1
                 result[t] = new_result
