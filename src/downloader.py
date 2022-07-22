@@ -4,6 +4,9 @@ import subprocess
 import progress_bar
 
 def downloader(url, epi_name, dir_name, capture_output=False) :
+    """ 
+    Obsolete
+    """
     print("downloading ", epi_name)
     s = 'cd %s; ffmpeg -i "%s" -c copy %s.mp4' %(dir_name, url, epi_name)
     a = subprocess.run(s).returncode

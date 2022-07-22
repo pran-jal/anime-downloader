@@ -1,15 +1,10 @@
 import os
-import time
 import threading
-# import requests as r
 import src.urls as urls
-import src.headers as headers
-import src.servers as servers
-# import src.get_info as get_info
+import src.episode_list as episode_list
 import src.resolution as resolution
 import src.namevarifier as namevarifier
 import src.progress_bar as progress_bar
-# import src.embed_varify as embed_varify
 import src.json_server as json_server
 
 class Downloader():
@@ -34,31 +29,27 @@ def main(url=None):
     if url == None:
         url = input("URL : ")
 
-    required = servers.servers(url)
-    total_episodes = len(required[1])-2
+    total_episodes = len(episode_list.get_e_list(url))-2
 
-    print("Required files Ready............")
     all_urls = urls.generator(url, total_episodes)
 
     dir_name = all_urls[0].split('/watch/')[1][:-1:].split('episode')[0][:-1:]
     print("Downloading to {0}\n".format(dir_name))
+    
     if not os.path.exists(dir_name):
         os.mkdir(dir_name)
 
     lists = json_server.get_json(all_urls)
     threads = []
     results = []
-
-    for url in all_urls:
+    for url in lists:
         d = Downloader(url)
         t = threading.Thread(target = d.download_episode, args=(dir_name, lists[url]))
         t.start()
         threads.append(t)
         results.append(d)
 
-    # for t in threads:
-    #     t.join()
-    time.sleep(15)
+    print("Required files Ready............")
     wait_for = 0
     total_in_downloading = len(results)
     result = ['']*total_in_downloading
