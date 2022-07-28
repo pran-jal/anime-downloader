@@ -18,8 +18,6 @@ def download_episode(url):
     name = namevarifier.namevarifier(url.split('/watch/')[1][:-1])
     bar = progress_bar.ProgressBar(episode, name, name)
     bar.downloader()
-
-
     # return progress_bar.downloader(episode, name, name)
 
 

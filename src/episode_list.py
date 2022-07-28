@@ -3,12 +3,12 @@ sys.path.insert(1, './src')
 import htmlreader
 import requests as r
 
-def get_servers(url) :
+def get_e_list(url) :
     site = r.get(url).text
     read = htmlreader.reader()
     read.feed(site)
     read.close()
-    return read.servers
+    return read.episodes
 
 if __name__ == '__main__':
-    print(get_servers(input()))
+    print(get_e_list(input()))

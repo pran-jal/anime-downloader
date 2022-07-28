@@ -10,8 +10,9 @@ class reader(parser):
         self.link = []
         self.episodes = []
         self.watch_ids = {}
-
+        self.servers = {}
         self.title = 0
+        self.page_error = 0
         self.episode_name = ''
 
         self.page_identifier = ''
@@ -20,18 +21,15 @@ class reader(parser):
         if tag.lower() == 'a':
             for i,j in attrs :
                 if i.lower() == 'class' and j.lower() == 'nav-link btn btn-sm btn-secondary link-item':
-                    server = []
-                    key = ''
+                    server = {}
                     for i,j in attrs :
                         if i.lower() == 'data-embed':
-                            self.link.append(j)
-                            server.append(j)
-                            key = j.split('/e/')[0].split('//')[1][:-1:]
+                            server['embed'] = j
+                            server['key'] = j.split('/e/')[1].split('?')[0]
                         elif i.lower() == 'id':
-                            server.append(j)
-                    self.watch_ids['key'] = server
-                    del server
-                    del key
+                            server['id'] = j
+                    if server != {}:
+                        self.servers[server['embed'].split('/e/')[0].split('//')[1].split('.')[0]] = server
 
         elif tag.lower() == 'ul' and attrs[0][0] == 'class' and attrs[0][1] == 'nav':
             self.recording += 1
@@ -47,6 +45,8 @@ class reader(parser):
                             self.page_identifier = j
                             # why is page identifier same for all episodes of a season
                 
+                elif i.lower() == 'class' and j.lower() == 'errorpage':
+                    self.page_error = 1
     def handle_endtag(self, tag ) :
         if tag.lower() == 'ul' and self.recording>0:
             self.recording -= 1

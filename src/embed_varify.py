@@ -4,6 +4,9 @@ import requests as r
 import headers
 
 def varify_urls(urls) :
+    """ 
+    Obsolete
+    """
     for url in urls:
         if r.head(url).status_code != 200:
             # headers.headers['Host'] = url.split('/')[2]                   # not required anymore why ?
