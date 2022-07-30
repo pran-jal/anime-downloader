@@ -27,7 +27,6 @@ def get_json(urls: list, server_name = None):
                         a = r.get(req.url, params=req.params, headers=req.headers)
                         if a.status_code == 200 and a.json()["status"] == 200:
                             json_list[url] = a
-                            print(a.content)
                             found = 1
                             del browser.requests
                 if found:
