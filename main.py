@@ -2,7 +2,11 @@ import os
 import threading
 import subprocess
 import requests as r
+from seleniumwire import webdriver
 from html.parser import HTMLParser as parser
+# import seleniumwire.undetected_chromedriver as uc
+# from seleniumwire.undetected_chromedriver import FirefoxOptions
+# from seleniumwire.webdriver import FirefoxOptions
 
 headers = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
@@ -10,7 +14,6 @@ headers = {
     'origin': 'https://animeheaven.pro',
     'Referer': 'https://animeheaven.pro/',
 }
-
 
 quality = {
     'vidstream': {
@@ -40,27 +43,50 @@ class reader(parser):
     def __init__(self, *, convert_charrefs = False) :
         super().__init__(convert_charrefs=convert_charrefs)
         self.reset()
+        
         self.recording = 0
         self.link = []
         self.episodes = []
-
+        self.watch_ids = {}
+        self.servers = {}
         self.title = 0
-        self.element = {}
+        self.page_error = 0
+        self.episode_name = ''
+        self.page_identifier = ''
 
     def handle_starttag(self, tag, attrs):
+        
         if tag.lower() == 'a':
             for i,j in attrs :
                 if i.lower() == 'class' and j.lower() == 'nav-link btn btn-sm btn-secondary link-item':
+                    server = {}
                     for i,j in attrs :
                         if i.lower() == 'data-embed':
-                            self.link.append(j)
+                            server['embed'] = j
+                            server['key'] = j.split('/e/')[1].split('?')[0]
+                        elif i.lower() == 'id':
+                            server['id'] = j
+                    if server != {}:
+                        self.servers[server['embed'].split('/e/')[0].split('//')[1].split('.')[0]] = server
+                    del server
 
         elif tag.lower() == 'ul' and attrs[0][0] == 'class' and attrs[0][1] == 'nav':
             self.recording += 1
 
         elif tag.lower() == 'title' :
-            self.title += 1
+            self.title = 1
+        
+        elif tag.lower() == 'div' :
+            for i, j in attrs :
+                if i.lower() == 'class' and j.lower() == 'detail_page-watch':
+                    for i, j in attrs :
+                        if i.lower() == 'data-mid':
+                            self.page_identifier = j
+                            # why is page identifier same for all episodes of a season
                 
+                elif i.lower() == 'class' and j.lower() == 'errorpage':
+                    self.page_error = 1
+    
     def handle_endtag(self, tag ) :
         if tag.lower() == 'ul' and self.recording>0:
             self.recording -= 1
@@ -73,10 +99,67 @@ class reader(parser):
             self.episodes.append(data) if ( data !='\n' and data != '\n ') else None
 
         elif self.title>0 :
-            self.element['name'] = data
-            
+            self.episode_name = data
+            self.title = 0
+        
+        # Obsolete. website does not use skey now
         elif data.startswith("window.skey") :
             self.element['key'] = data.split("'")[1]
+
+def get_json(urls: list, server_name = None):
+    option = webdriver.FirefoxOptions()
+    option.headless = True
+    option.accept_insecure_certs = True
+    browser = webdriver.Firefox(executable_path = 'webdriver\geckodriver', service_log_path='./webdriver/animeheaven_json.log')
+    # browser = uc.Chrome(executable_path='webdriver\chromedriver', service_log_path='./webdriver/animeheaven_json.log', options=option )
+    json_list = {}
+    try:
+        for url in urls:
+            count = 0
+            print('getting: ', url)
+            browser.get(url)
+            found = 0
+
+            while True:
+                for req in browser.requests:
+                    if req.url.startswith('https://vizcloud.site/mediainfo/'):
+                        a = r.get(req.url, params=req.params, headers=req.headers)
+                        if a.status_code == 200 and a.json()["status"] == 200:
+                            json_list[url] = a
+                            found = 1
+                            del browser.requests
+                if found:
+                    break
+                if count == 1:
+                    break
+                else:
+                    read = reader()
+                    read.feed(browser.page_source)
+                    server_list = read.servers
+                    browser.switch_to.frame(browser.find_element_by_id("iframe-embed"))
+                    count = +1
+                    read.feed(browser.page_source)
+                    if read.page_error:
+                        browser.switch_to.parent_frame()
+                        try:
+                            add = browser.find_element_by_xpath("/html/div")
+                            while True:
+                                browser.execute_script("""
+                                    var e = arguments[0];
+                                    e.remove();
+                                    """, add)
+                                add = browser.find_element_by_xpath("/html/div")
+                        except Exception as t:
+                            pass
+                        browser.find_element_by_id(server_list[next(iter(server_list))]['id']).find_element_by_xpath("./..").click()
+                        print('error',server_list[next(iter(server_list))]['id'])    
+    
+    except Exception as e:
+        print(e)
+    
+    finally:
+        browser.quit()
+        return json_list
 
 def namevarifier(name):
     for i in name:
@@ -88,12 +171,12 @@ def namevarifier(name):
                 name = name[:j:]+'_'+name[j+1::]
     return name
 
-def servers(url) :
+def get_e_list(url) :
     site = r.get(url).text
     read = reader()
     read.feed(site)
     read.close()
-    return [read.link, read.episodes]
+    return read.episodes
 
 def urls_generator(url, total_episodes):
     url = url[::-1]
@@ -108,47 +191,24 @@ def urls_generator(url, total_episodes):
                 break 
     url = url[i::][::-1]
     urls = []
-    for episode in total_episodes:
-        urls.append( url + episode + end )
+    for i in range(1, total_episodes+1):
+        urls.append( url+str(i)+end )
     return urls
-
-def varify_urls(urls) :
-    for url in urls:
-        if r.head(url).status_code != 200:
-            # headers['Host'] = url.split('/')[2]
-            urls[urls.index(url)] = r.head(url).headers['Location']
-    return urls
-
-def getSkey(url) :
-    # headers.headers['Host'] = url.split('/')[2]               why ?
-    headers['Host'] = url.split('/')[2]             
-    skey = r.get(url, headers=headers).text
-    read = reader()
-    read.feed(skey)
-    read.close()
-    return read.element
 
 def resolutions(list_url):
     resos = r.get(list_url)
     return [i for i in resos.text.split('\n') if i.startswith('H') or i.startswith('h') ]
 
-def downloader(url, name, dir_name, capture_output=False) :
+def downloader(url, name, dir_name, capture_output=True) :
     print("downloading ", name)
-    s = 'cd %s; ffmpeg -i "%s" -c copy %s.mp4' %(dir_name, url, name)
+    s = 'cd %s; ffmpeg -i "%s" -c copy %s.mp4 -y' %(dir_name, url, name)
     if subprocess.run(["powershell", "-command", s], capture_output=capture_output).returncode == 0:
         return (f"{name} downloaded successfully")
     else:
         return (f"downloading  {name} failed")
 
 class Downloader():
-    def download_episode(self, url, keys, dir_name, capture_output=False):
-        required = servers(url)    # [ [vidstream url, mcloud url]  [ no of episodes ] ]
-        embedurls = required[0]
-        embedurls = varify_urls(embedurls)
-        info = embedurls[0].split('/e/')
-        listurl = info[0]+'/info/'+info[1]+'&skey='+keys['key']
-        # headers['Referer'] = embedurls[0]
-        lists = r.get(listurl, headers=headers)
+    def download_episode(self, url, dir_name, lists, capture_output = True):
         episode = lists.json()['data']['media']['sources'][1]['file']
         res = resolutions(episode)
         episode = episode[::-1]
@@ -163,31 +223,28 @@ def main(url=None):
     if url == None:
         url = input("URL : ")
 
-    print("Getting Required files..........")
-    required = servers(url)
-    total_episodes = required[1][2:]
-    embedurls = varify_urls(required[0])
-    keys = getSkey(embedurls[0])             # skey same for both servers
-
-    print("Required files Ready............")
-    print("\nTotal number of Episodes to download: ", len(total_episodes))
+    total_episodes = len(get_e_list(url))-2
 
     all_urls = urls_generator(url, total_episodes)
+
+    lists = get_json(all_urls)
+    print("Required files Ready............")
+
     dir_name = all_urls[0].split('/watch/')[1][:-1:].split('episode')[0][:-1:]
-    print("Downloading to: ", dir_name)
+    print("\nDownloading to {0}".format(dir_name))
     if not os.path.exists(dir_name):
         os.mkdir(dir_name)
 
     threads = []
     results = []
-    print("Starting Downloading............")
-    for i in all_urls:
-            d = Downloader()
-            t = threading.Thread(target = d.download_episode, args= (i, keys, dir_name, True) )
-            t.start()
-            threads.append(t)
-            results.append(d)
 
+    for url in lists:
+        d = Downloader()
+        t = threading.Thread(target = d.download_episode, args=(url, dir_name, lists[url]))
+        t.start()
+        threads.append(t)
+        results.append(d)
+    
     for t in threads:
         t.join()
 
@@ -199,4 +256,4 @@ def main(url=None):
         print(t.result)
 
 if __name__ == '__main__' :
-    main('https://animeheaven.pro/watch/ascendance-of-a-bookworm-season-3-dub-j3j0-episode-1/')
+    main()
