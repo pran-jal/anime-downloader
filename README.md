@@ -6,12 +6,28 @@ Downloads the anime from .m3u8 file by scrapping animeheaven.pro using the episo
 
 Run main.py and paste url
 
+## TODO
 
-## `4th Release -v3`
-> ### `Fixed`
-> - *episode and season download without skey*
-> ### `Changed`
-> - *source files moved to src*
-> - *Removed geting json data url from script.js*
-> ### `Added`
-> - *get_info that uses selenium to get json data url*
+*    change headers.py to headers.txt or json
+*    optimize
+*    all in one
+*    Url filtering for uncensored episodes not working
+*    Not working for series of uncensored episodes
+*    Add progress bar for downloading
+*    Add log file per episode/season
+*    Add cli arguments for season|episode|perticular episodes, capture output, use perticular server|resolution, custom name for dir|episode, 
+*    Add changelog
+*    check server|resolution availability and switch ot other server|resolution for perticular server|resolution given by user
+*    change multithreading to 20 at a time at max
+*    Add option to download episode or not if already one exist of same name ( use -y )
+*    Add more websites.
+
+## Requirements
+
+`selenium`
+    
+    pip install selenium
+or
+[Download From here](https://pypi.org/project/selenium/), unzip and run
+    
+    python setup.py install
