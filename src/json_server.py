@@ -1,5 +1,7 @@
+import sys
+sys.path.insert(1, './src')
 import requests as r
-from src.htmlreader import reader
+from htmlreader import reader
 from seleniumwire import webdriver
 # import seleniumwire.undetected_chromedriver as uc
 # from seleniumwire.undetected_chromedriver import FirefoxOptions

@@ -1,31 +1,18 @@
 import sys
+import os
 sys.path.insert(1, './src')
 import subprocess
-import progress_bar
 
-def downloader(url, epi_name, dir_name, capture_output=False) :
-    """ 
-    Obsolete
-    """
+def downloader(url, epi_name, dir_name, capture_output=True) :
     print("downloading ", epi_name)
-    s = 'cd %s; ffmpeg -i "%s" -c copy %s.mp4' %(dir_name, url, epi_name)
-    a = subprocess.run(s).returncode
+    if not os.path.exists(dir_name):
+        os.mkdir(dir_name)
+    s = 'ffmpeg -i "%s" -c copy %s.mp4 -y' %(url, epi_name)
+    a = subprocess.run(s, cwd=dir_name, capture_output=capture_output).returncode
     if a == 0:
         return (f"{epi_name} downloaded successfully")
     else:
         return (f"downloading {epi_name} failed")
         
-    # command = 'ffmpeg -i %s -c copy %s.mp4 -progress -' %(url, epi_name)
-    # cmd = command.split(' ')
-    # bar = progress_bar.ProgressBar(cmd=cmd, epi_name=epi_name, dir_name=dir_name)
-    # while True:
-    #     for progress in bar.run_command_with_progress():
-    #         bar.progress_Bar(progress)
-    #     break
-    # if bar.result == 0:
-    #     return (f"{epi_name} downloaded successfully")
-    # else:
-    #     return (f"downloading {epi_name} failed")
-
 if __name__ == '__main__' : 
-    downloader(input(), 'download.mp4', False)
+    downloader(input(), 'download.mp4', True)
