@@ -1,6 +1,10 @@
 test.py
-bar.py
 main.py
+test.json
+
+obsolete/
+webdriver/
+
 
 *.mp4
 *.pyc
