@@ -11,8 +11,6 @@ Run main.py and paste url
 *    change headers.py to headers.txt or json
 *    optimize
 *    all in one
-*    Url filtering for uncensored episodes not working
-*    Not working for series of uncensored episodes
 *    Add progress bar for downloading
 *    Add log file per episode/season
 *    Add cli arguments for season|episode|perticular episodes, capture output, use perticular server|resolution, custom name for dir|episode, 
