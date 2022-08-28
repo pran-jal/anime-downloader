@@ -1,6 +1,6 @@
-def namevarifier(name):
+def validate(name):
     for i in name:
-        if i not in 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_.' :
+        if i not in 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_.-' :
             j = name.index(i)
             if (name[j-1] == '_' and j>0) or j==0:
                 name = name[:j:]+name[j+1::]
@@ -9,4 +9,4 @@ def namevarifier(name):
     return name
 
 if __name__ == "__main__":
-    print(namevarifier(input()))
+    print(validate(input()))
