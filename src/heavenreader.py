@@ -14,20 +14,26 @@ class reader(parser):
         self.title = 0
         self.page_error = 0
         self.episode_name = ''
+        self.episodes_url = []
 
         self.page_identifier = ''
 
     def handle_starttag(self, tag, attrs):
         if tag.lower() == 'a':
             for i,j in attrs :
-                if i.lower() == 'class' and j.lower() == 'nav-link btn btn-sm btn-secondary link-item':
+                if i.lower() == 'class' and ( j.lower() == 'nav-link btn btn-sm btn-secondary eps-item ' or j.lower() == 'nav-link btn btn-sm btn-secondary eps-item active' ):
+                    for p,q in attrs :
+                        if p.lower() == 'href':
+                            self.episodes_url.append(q)
+                
+                elif i.lower() == 'class' and j.lower() == 'nav-link btn btn-sm btn-secondary link-item':
                     server = {}
-                    for i,j in attrs :
-                        if i.lower() == 'data-embed':
-                            server['embed'] = j
-                            server['key'] = j.split('/e/')[1].split('?')[0]
-                        elif i.lower() == 'id':
-                            server['id'] = j
+                    for p,q in attrs :
+                        if p.lower() == 'data-embed':
+                            server['embed'] = q
+                            server['key'] = q.split('/e/')[1].split('?')[0]
+                        elif p.lower() == 'id':
+                            server['id'] = q
                     if server != {}:
                         self.servers[server['embed'].split('/e/')[0].split('//')[1].split('.')[0]] = server
 
