@@ -1,10 +1,9 @@
 import requests as r
-from src.htmlreader import reader
+from src.heavenreader import reader
 from seleniumwire import webdriver
 # import seleniumwire.undetected_chromedriver as uc
 # from seleniumwire.undetected_chromedriver import FirefoxOptions
 # from seleniumwire.webdriver import FirefoxOptions
-
 
 def get_json(urls: list, server_name = None):
     option = webdriver.FirefoxOptions()
@@ -23,11 +22,11 @@ def get_json(urls: list, server_name = None):
 
             while True:
                 for req in browser.requests:
-                    if req.url.startswith('https://vizcloud.site/mediainfo/'):
+                    if req.url.startswith('https://vidstream.pro/mediainfo/'):
                         a = r.get(req.url, params=req.params, headers=req.headers)
                         if a.status_code == 200 and a.json()["status"] == 200:
                             json_list[url] = a
-                            print(a.content)
+                            # print(a.content)
                             found = 1
                             del browser.requests
                 if found:
