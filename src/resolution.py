@@ -10,7 +10,6 @@ headers = {
 
 def resolutions(list_url):
     resos = r.get(list_url, headers=headers)
-    print(resos)
     return [i for i in resos.text.split('\n') if i.startswith('H') or i.startswith('h') ]
 
 if __name__ == '__main__':
