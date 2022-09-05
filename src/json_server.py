@@ -22,7 +22,7 @@ def get_json(urls: list, server_name = None):
 
             while True:
                 for req in browser.requests:
-                    if req.url.startswith('https://vidstream.pro/mediainfo/'):
+                    if req.url.startswith('https://vidstream.pro/') and len(req.url)>100:
                         a = r.get(req.url, params=req.params, headers=req.headers)
                         if a.status_code == 200 and a.json()["status"] == 200:
                             json_list[url] = a
