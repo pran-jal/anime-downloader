@@ -4,8 +4,8 @@ import os
 sys.path.insert(1, "./")
 from src.ffmpeg import ffmpeg_downloader as ffmpeg
 
-def download(episodes: list, dir_name, use = None):
-    print(episodes, dir_name, use)
+def download(episodes: list, dir_name, referer, use = None):
+    print(episodes)
     if os.path.exists(dir_name):
         to_del = []
         for episode in episodes:
@@ -31,8 +31,7 @@ def download(episodes: list, dir_name, use = None):
 
     downloaders = []
     for episode in episodes:
-        epi = ffmpeg(episode["down_link"], episode["title"], dir_name)
-        print(epi)
+        epi = ffmpeg(episode["down_link"], episode["title"], dir_name, referer)
         downloaders.append(epi)
 
     for downl in downloaders:

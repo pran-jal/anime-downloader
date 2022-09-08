@@ -36,10 +36,7 @@ def main(url=None):
     if url == None:
         url = input("Url : ")
 
-    all_urls = get_epi_list(url)
-
-    dir_name = validate(url.split('/watch/')[1][:-1:].split('episode')[0][:-1:])
-    lists = json_server.get_json(all_urls)
+    lists = json_server.get_json(get_epi_list(url))
 
     episodes = []
     for url in lists:
@@ -55,9 +52,11 @@ def main(url=None):
         episode["down_link"] = m3u8
         episodes.append(episode)
 
+    dir_name = validate(url.split('/watch/')[1][:-1:].split('episode')[0][:-1:])
+    referer = '/'.join(episodes[0]["down_link"].split("/")[:3]) + '/'
     print("Required files Ready............")
     print("Downloading to {0}\n".format(dir_name))
-    download(episodes, dir_name)
+    download(episodes, dir_name, referer)
 
 if __name__ == '__main__' :
     main('https://animeheaven.pro/watch/tsubasa-to-hotaru-2016-60bq-episode-3/')
