@@ -1,10 +1,16 @@
 # Anime-Downloader
 
-Downloads the anime from .m3u8 file by scrapping animeheaven.pro using the episode url and ffmpeg.
+Downloads the anime from different websites by using the episode url.
 
 ### USAGE-
 
-Run main.py and paste url
+    Run main.py and paste url
+
+> supports `animeheaven.pro` only.
+
+> more websites will be added.
+
+> downloads complete season.
 
 ## TODO
 
@@ -29,3 +35,7 @@ or
 [Download From here](https://pypi.org/project/selenium/), unzip and run
     
     python setup.py install
+    
+`ffmpeg`
+
+[download here](https://ffmpeg.org/download.html)
