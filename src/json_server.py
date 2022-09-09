@@ -1,3 +1,5 @@
+import re
+import traceback
 import requests as r
 from src.heavenreader import reader
 from seleniumwire import webdriver
@@ -22,7 +24,8 @@ def get_json(urls: list, server_name = None):
 
             while True:
                 for req in browser.requests:
-                    if req.url.startswith('https://vidstream.pro/') and len(req.url)>100:
+                    # if req.url.startswith('https://vidstream.pro/') and len(req.url)>100: # 100 no working its 85 now but not sure if it is so for all
+                    if re.fullmatch(re.compile("https://vidstream.pro/[\w]+/[\d-]+"), req.url):
                         a = r.get(req.url, params=req.params, headers=req.headers)
                         if a.status_code == 200 and a.json()["status"] == 200:
                             json_list[url] = a
@@ -57,6 +60,7 @@ def get_json(urls: list, server_name = None):
     
     except Exception as e:
         print(e)
+        # traceback.print_exc()
     
     finally:
         browser.quit()

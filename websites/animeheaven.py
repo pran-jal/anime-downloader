@@ -37,6 +37,9 @@ def main(url=None):
         url = input("Url : ")
 
     lists = json_server.get_json(get_epi_list(url))
+    if not len(lists):
+        print("json servers fetching failed")
+        return
 
     episodes = []
     for url in lists:
