@@ -80,8 +80,6 @@ def main(url = None):
     dir_name = episodes[0]["title"].split("_-_")[0]
     referer = 'https://kwik.cx/'
 
-
-    # this also need to send referer kwik to ffmpeg
     download(episodes, dir_name, referer)
 
 if __name__ == "__main__":
