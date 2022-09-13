@@ -1,12 +1,12 @@
 import os
 import sys
-sys.path.insert(1,'./')
 import requests as r
-import src.json_server as json_server
+sys.path.insert(1,'./')
 from src.titlecheck import validate
-from src.resolution import resolutions
 from src.heavenreader import reader
 from src.downloader import download
+import src.json_server as json_server
+from src.resolution import resolutions
 
 def get_epi_list(url) :
     site = r.get(url).text
@@ -32,7 +32,7 @@ def generate(url, total_episodes):
         urls.append( url+str(i)+end )
     return urls
 
-def main(url=None):
+def main(url = None):
     if url == None:
         url = input("Url : ")
 
