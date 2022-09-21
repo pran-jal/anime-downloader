@@ -6,7 +6,7 @@ Downloads the anime from different websites by using the episode url.
 
     Run main.py and paste url
 
-> supports `animeheaven.pro` only.
+> supports `animeheaven.pro` and `animepahe.com` only.
 
 > more websites will be added.
 
