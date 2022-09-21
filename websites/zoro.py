@@ -44,12 +44,15 @@ def main(url = None):
     for i in episodes_url_list:
         servers = get_episode_servers(episodes_url_list[i])
         for server in servers:
-            data = r.get(server + "?z=&autoPlay=1&oa=0&asi=1", headers = {
-                'referer': 'https://zoro.to/',
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36'
-                }
-            )
-            print(data.content)
+            print(server)
+            # data = r.get(server + "?z=&autoPlay=1&oa=0&asi=1", headers = {
+            #     'referer': 'https://zoro.to/',
+            #     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36'
+            #     }
+            # )
+            # print(data.text)
+        print()
+        # break
 
 if __name__ == "__main__":
-    main("https://zoro.to/watch/my-stepsister-is-my-ex-girlfriend-18079?ep=92604")
+    main("https://zoro.to/watch/fullmetal-alchemist-brotherhood-1?ep=1")
