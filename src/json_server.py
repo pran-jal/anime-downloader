@@ -25,7 +25,7 @@ def get_json(urls: list, server_name = None):
             while True:
                 for req in browser.requests:
                     # if req.url.startswith('https://vidstream.pro/') and len(req.url)>100: # 100 no working its 85 now but not sure if it is so for all
-                    if re.fullmatch(re.compile("https://vidstream.pro/[\w]+/[\d-]+"), req.url):
+                    if re.fullmatch(re.compile("https://vidstream.pro/[\w]+/[\w_]+="), req.url):
                         a = r.get(req.url, params=req.params, headers=req.headers)
                         if a.status_code == 200 and a.json()["status"] == 200:
                             json_list[url] = a
