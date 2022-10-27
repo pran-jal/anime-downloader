@@ -8,7 +8,7 @@ class reader(parser):
         self.data_ids = {}
         self.epi_servers = {}
         self.is_server = 0
-        self.server_ids = []
+        self.server_ids = { "sub" : [], "dub": [] }
 
     def handle_starttag(self, tag, attrs) -> None:
         if tag.lower() == 'a':
@@ -21,7 +21,7 @@ class reader(parser):
         elif tag.lower() == "div":
             for i, j in attrs:
                 if i == "class" and j == "item server-item":
-                    self.server_ids.append(attrs[2][1])
+                    self.server_ids[attrs[1][1]].append(attrs[2][1])
 
     def handle_data(self, data):
         if self.is_server and len(data.strip()): 

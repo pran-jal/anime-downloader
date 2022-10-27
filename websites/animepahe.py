@@ -64,17 +64,20 @@ def main(url = None):
     if url == None:
         url = input("Url: ")
     sessions = all_epi_url_from_api(url)
-
     episodes = []
+    
+    print("total Episodes:", len(sessions))
     for id in sessions:
+        print("getting link: ", id)
         episode = {}
         episode["url"] = f'https://animepahe.com/api?m=links&id={sessions[id]}&p=kwik'
-        embed_urls = embeds_seperate(r.get(episode["url"], headers=user_agent).json()['data'])# .pop() gives the last value which is the data of the best resolution.
+        embed_urls = embeds_seperate(r.get(episode["url"], headers=user_agent).json()['data'])# .pop() the last value is the data of the best resolution.
         embed_page = r.get(embed_urls["1080"], headers=headers).text
         episode["title"] = validate(re.findall(re.compile("<title>[\w-]+.mp4</title>"), embed_page)[0].split('>')[1].split(".mp4")[0])
         session_vala_chunk = re.findall(re.compile("<script>.*[\s\S]*?(?=</script>)"), embed_page)[0]
-        session = '/'.join(session_vala_chunk.split('eval(function(').pop().split('|m3u8|uwu|')[1].split("'.split('|')")[0].split('|')[2::-1])
-        episode["down_link"] = "https://eu-191.files.nextcdn.org/" + session + "/uwu.m3u8"
+        session = session_vala_chunk.split('eval(function(').pop().split('|uwu|')[1].split("'.split('|')")[0].split('|')
+        episode["down_link"] = session.pop() + "://" + session.pop() + "-" + session.pop() + "." + session.pop() + "." + session.pop() + "." + session.pop() + "/" + session.pop() + "/" + session.pop() + "/" + session.pop() + "/uwu.m3u8"
+        print(episode["down_link"])
         episodes.append(episode)
 
     dir_name = episodes[0]["title"].split("_-_")[0]
@@ -83,4 +86,5 @@ def main(url = None):
     download(episodes, dir_name, referer)
 
 if __name__ == "__main__":
-    main("https://animepahe.com/anime/17b49872-8b62-9721-7884-813747531544")
+    # main("https://animepahe.com/anime/d11b2a1a-64af-7a38-d006-67d87cf34b2b")
+    main()

@@ -1,8 +1,8 @@
-import re
 import sys
 sys.path.insert(1, "./")
 import requests as r
 from src.zororeader import reader
+from servers import streamtape
 
 host = "https://zoro.to"
 episode_list_api = "https://zoro.to/ajax/v2/episode/list/"
@@ -29,9 +29,8 @@ def get_episode_servers(episode_id):
     servers_ids = read.server_ids
 
     servers = []
-    for id in servers_ids:
-        servers.append(r.get(episodes_servers_links_api + id).json()["link"])
-
+    for id in servers_ids["sub"]:
+        servers.append(r.get(episodes_servers_links_api + id, headers=user_agent).json()["link"])
     return servers
         
 
@@ -45,6 +44,8 @@ def main(url = None):
         servers = get_episode_servers(episodes_url_list[i])
         for server in servers:
             print(server)
+            # if 'streamtape' in server:
+                # print(streamtape.get(server))
             # data = r.get(server + "?z=&autoPlay=1&oa=0&asi=1", headers = {
             #     'referer': 'https://zoro.to/',
             #     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36'
