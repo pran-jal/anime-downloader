@@ -28,7 +28,7 @@ user_agent = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36'
 }
 
-def streamtape(url: str) -> str:
+def get(url: str) -> str:
 
     url = "https://shavetape.cash/e/" + url.split("/e/")[1] 
     # url = re.sub(re.compile("/(http:|https:)(^|\/\/)(.*?\/)/"), "https://shavetape.cash/", url)
@@ -41,6 +41,9 @@ def streamtape(url: str) -> str:
     read.feed(page.text)
     scripts = read.script.strip().split(';')
     scripts.pop()
+    if not len(scripts):
+        print("streamtape - video not found!  Maybe it got deleted by the creator!")
+        return
 
     for script in scripts:
         url_parts = script.strip().split('innerHTML = ')[1].split("')")
@@ -48,10 +51,10 @@ def streamtape(url: str) -> str:
         start = re.sub(r"^(/)+", '', re.sub(re.compile("[\"+\\\' \(\)]+"), '', url_part[0]))
         end = url_parts[1].split('.substring(')
         buff = sum([int(i[0]) for i in end if len(i) and i[0].isnumeric])
-        url = "https://" + start + url_part[1][buff:]
-        down_link = r.head(url).headers.get("Location")
+        url = "https://" + start + url_part[1][buff+1:]
+        down_link = r.head(url, headers=user_agent).headers.get("Location")
         if down_link.endswith("/video.mp4"):
             return down_link   
 
 if __name__ == "__main__":
-    print(streamtape("https://streamtape.com/e/948lZQgkwKUa3Da/"))
+    print(get("https://streamtape.com/e/zLv9d2Y3pZCYdlM/"))

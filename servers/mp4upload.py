@@ -2,7 +2,7 @@ import requests as r
 import re
 import heavenreader as heavenreader
 
-def from_mp4upload(server):
+def get(server):
     server_url = server.split('embed-')
     download_page = r.get(server_url[0]+server_url[1])
     if download_page.status_code == 200:
