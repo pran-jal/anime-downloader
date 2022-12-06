@@ -20,7 +20,7 @@ def get_all_urls(url: str):
     all_url_html = r.get(episode_list_api + anime_id, headers=user_agent)
     read = reader()
     read.feed(all_url_html.json()["html"])
-    return read.data_ids
+    return read.epi_names, read.data_ids
 
 def get_episode_servers(episode_id):
     servers = r.get(episode_servers_api + episode_id, headers=user_agent).json()["html"]
@@ -38,22 +38,24 @@ def get_episode_servers(episode_id):
 def main(url = None):
     if url == None:
         url = input("url: ")
-    episodes_url_list = get_all_urls(url)
+    episodes_name_list, episodes_url_list = get_all_urls(url)
     
+    episodes = []
     for i in episodes_url_list:
+        print("getting link: ", episodes_name_list[i])
         servers = get_episode_servers(episodes_url_list[i])
         for server in servers:
-            print(server)
-            # if 'streamtape' in server:
-                # print(streamtape.get(server))
-            # data = r.get(server + "?z=&autoPlay=1&oa=0&asi=1", headers = {
-            #     'referer': 'https://zoro.to/',
-            #     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36'
-            #     }
-            # )
-            # print(data.text)
-        print()
-        # break
+            if 'streamtape' in server:
+                episode = {}
+                episode["url"] = server
+                episode["title"] = episodes_name_list[i]
+                episode["down_link"] = streamtape.get(server)
+                episodes.append(episode)
+            else:
+                # print(f"Error: {episodes_name_list[i]} streamtape link not found. Zoro currently supports streamtape server only")
+                print(server)
+
+    print(episodes)
 
 if __name__ == "__main__":
-    main("https://zoro.to/watch/fullmetal-alchemist-brotherhood-1?ep=1")
+    main()

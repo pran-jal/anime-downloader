@@ -7,6 +7,7 @@ class reader(parser):
         self.reset()
         self.data_ids = {}
         self.epi_servers = {}
+        self.epi_names = {}
         self.is_server = 0
         self.server_ids = { "sub" : [], "dub": [] }
 
@@ -17,6 +18,10 @@ class reader(parser):
                     for o, k in attrs:
                         if o == "data-id":
                             self.data_ids[j] = k
+                
+                        elif o == 'title':
+                            self.epi_names[j] = k
+                            
 
         elif tag.lower() == "div":
             for i, j in attrs:
