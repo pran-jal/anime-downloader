@@ -1,5 +1,6 @@
 import re
 import sys
+import base36
 import requests as r
 sys.path.insert(1, './')
 
@@ -18,6 +19,28 @@ user_agent = {
 }
 
 
+def e(c, a):    
+    first = '' if c<a else str(len(e(c//a, a)))
+    c=c%a
+    c = chr(c+29) if c>35 else base36.dumps(c)
+    return first + c
+
+def chunk_decoder(session):
+    session = session.split(');\',')
+    p = session[0][7:44]
+    session = session[1].split(',')
+    a = int(session[0])
+    c = int(session[1])
+    k = session[2].split('\'.split')[0][1:].split('|')
+    d = {}
+    while c:
+        c-=1
+        d[e(c,a)] = k[c]if k[c] else e(c,a)
+    for something in d:
+        p = re.sub(rf"\b{something}\b", d[something], p)
+    return p
+
+
 def all_epi_url(url):
     episode_page = r.get(url).text
     read = reader()
@@ -28,6 +51,8 @@ def all_epi_url(url):
     for i in range(total_episodes):
         session_ids[i+1] = episode_list[i].split('/').pop()
     return session_ids
+
+
 
 def all_epi_url_from_api(url):         # this can bypass the use of pahereader, may be faster
     url = url.split('/')
@@ -50,6 +75,8 @@ def all_epi_url_from_api(url):         # this can bypass the use of pahereader, 
 
     return session_ids
 
+
+
 def embeds_seperate(json_data):
     eng = {}
     jpn = {}
@@ -59,6 +86,8 @@ def embeds_seperate(json_data):
             eval(value["audio"])[key] = value["kwik"]
         
     return jpn
+
+
 
 def main(url = None):
     if url == None:
@@ -75,8 +104,15 @@ def main(url = None):
         embed_page = r.get(embed_urls["1080"], headers=headers).text
         episode["title"] = validate(re.findall(re.compile("<title>[\w-]+.mp4</title>"), embed_page)[0].split('>')[1].split(".mp4")[0])
         session_vala_chunk = re.findall(re.compile("<script>.*[\s\S]*?(?=</script>)"), embed_page)[0]
+        
+        
+        """ 
         session = session_vala_chunk.split('eval(function(').pop().split('|uwu|')[1].split("'.split('|')")[0].split('|')
         episode["down_link"] = session.pop() + "://" + session.pop() + "-" + session.pop() + "." + session.pop() + "." + session.pop() + "." + session.pop() + "/" + session.pop() + "/" + session.pop() + "/" + session.pop() + "/uwu.m3u8"
+        """
+        
+        session = session_vala_chunk.split('}(').pop()[:-3]
+        episode["down_link"]  = chunk_decoder(session)
         episodes.append(episode)
 
     dir_name = episodes[0]["title"].split("_-_")[0]
