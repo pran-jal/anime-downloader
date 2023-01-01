@@ -102,7 +102,7 @@ def main(url = None):
         episode["url"] = f'https://animepahe.com/api?m=links&id={sessions[id]}&p=kwik'
         embed_urls = embeds_seperate(r.get(episode["url"], headers=user_agent).json()['data'])# .pop() the last value is the data of the best resolution.
         embed_page = r.get(embed_urls["1080"], headers=headers).text
-        episode["title"] = validate(re.findall(re.compile("<title>[\w-]+.mp4</title>"), embed_page)[0].split('>')[1].split(".mp4")[0])
+        episode["title"] = validate(re.findall(re.compile("<title>[\w-]+.*.mp4</title>"), embed_page)[0].split('>')[1].split(".mp4")[0])
         session_vala_chunk = re.findall(re.compile("<script>.*[\s\S]*?(?=</script>)"), embed_page)[0]
         
         
