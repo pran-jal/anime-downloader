@@ -1,6 +1,4 @@
-import sys
 import os
-sys.path.insert(1, "./")
 from src.ffmpeg import ffmpeg_downloader as ffmpeg
 from src.curl import curl_downloader as curl
 

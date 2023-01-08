@@ -2,7 +2,7 @@ import re
 import sys
 import base36
 import requests as r
-sys.path.insert(1, './')
+sys.path.insert(1, "./")
 
 from src.downloader import download
 from src.pahereader import reader
@@ -27,7 +27,7 @@ def e(c, a):
 
 def chunk_decoder(session):
     session = session.split(');\',')
-    p = session[0][7:44]
+    p = re.findall(r"\w{1,2}://.*/\w{1,2}.\w{1,2}", session[0])[0]
     session = session[1].split(',')
     a = int(session[0])
     c = int(session[1])
