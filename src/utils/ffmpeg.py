@@ -11,7 +11,6 @@ class ffmpeg_downloader:
         self.elapsed_time = 0
         self.duration = 0
         self.state = None  # gives current condition of download
-        # self.progress = f"{self.title}: |{'-'*50}| 0.0% Completed\r"
         self.speed = '0'
     
     def start_download(self):

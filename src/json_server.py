@@ -1,7 +1,7 @@
 import re
 import traceback
 import requests as r
-from src.heavenreader import reader
+from src.readers.heavenreader import reader
 from seleniumwire import webdriver
 # import seleniumwire.undetected_chromedriver as uc
 # from seleniumwire.undetected_chromedriver import FirefoxOptions
