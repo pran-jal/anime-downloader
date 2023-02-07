@@ -1,12 +1,14 @@
 import os
 import sys
+sys.path.insert(1, "./")
 import requests as r
-sys.path.insert(1,'./')
-from src.titlecheck import validate
-from src.heavenreader import reader
-from src.downloader import download
+
+from src.utils.titlecheck import validate
+from src.readers.heavenpro import reader
+from src.utils.downloader import download
 import src.json_server as json_server
-from src.resolution import resolutions
+from src.utils.resolution import resolutions
+
 
 def get_epi_list(url) :
     site = r.get(url).text
@@ -14,6 +16,7 @@ def get_epi_list(url) :
     read.feed(site)
     read.close()
     return read.episodes_url
+
 
 def generate(url, total_episodes):
     url = url[::-1]
@@ -31,6 +34,7 @@ def generate(url, total_episodes):
     for i in range(1, total_episodes+1):
         urls.append( url+str(i)+end )
     return urls
+
 
 def main(url = None):
     if url == None:
@@ -60,6 +64,7 @@ def main(url = None):
     print("Required files Ready............")
     print("Downloading to {0}\n".format(dir_name))
     download(episodes, dir_name, referer)
+
 
 if __name__ == '__main__' :
     main('https://animeheaven.pro/watch/tsubasa-to-hotaru-2016-60bq-episode-3/')

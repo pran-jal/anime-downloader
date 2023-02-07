@@ -4,9 +4,9 @@ import base36
 import requests as r
 sys.path.insert(1, "./")
 
-from src.downloader import download
-from src.pahereader import reader
-from src.titlecheck import validate
+from src.utils.downloader import download
+from src.readers.pahe import reader
+from src.utils.titlecheck import validate
 
 headers = {
     'referer': 'https://animepahe.org/',
@@ -102,11 +102,15 @@ def main(url = None):
         episode["url"] = f'https://animepahe.com/api?m=links&id={sessions[id]}&p=kwik'
         embed_urls = embeds_seperate(r.get(episode["url"], headers=user_agent).json()['data'])# .pop() the last value is the data of the best resolution.
         embed_page = r.get(embed_urls["1080"], headers=headers).text
-        episode["title"] = validate(re.findall(re.compile("<title>[\w-]+.*.mp4</title>"), embed_page)[0].split('>')[1].split(".mp4")[0])
+        read = reader()
+        read.feed(embed_page)
+        episode["title"] = read.title.split(".mp4")[0]
+        print(episode["title"])
         session_vala_chunk = re.findall(re.compile("<script>.*[\s\S]*?(?=</script>)"), embed_page)[0]
         
         
         """ 
+        episode["title"] = validate(re.findall(re.compile("<title>[\w-]+.*.mp4</title>"), embed_page)[0].split('>')[1].split(".mp4")[0])
         session = session_vala_chunk.split('eval(function(').pop().split('|uwu|')[1].split("'.split('|')")[0].split('|')
         episode["down_link"] = session.pop() + "://" + session.pop() + "-" + session.pop() + "." + session.pop() + "." + session.pop() + "." + session.pop() + "/" + session.pop() + "/" + session.pop() + "/" + session.pop() + "/uwu.m3u8"
         """
@@ -118,6 +122,8 @@ def main(url = None):
     dir_name = episodes[0]["title"].split("_-_")[0]
     referer = 'https://kwik.cx/'
 
+    print("Required files Ready............")
+    print("Downloading to {0}\n".format(dir_name))
     download(episodes, dir_name, referer)
 
 if __name__ == "__main__":
