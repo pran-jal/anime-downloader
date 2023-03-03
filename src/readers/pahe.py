@@ -1,3 +1,4 @@
+from collections import defaultdict
 from html.parser import HTMLParser as parser
 
 class reader(parser):
@@ -5,19 +6,30 @@ class reader(parser):
         super().__init__(convert_charrefs=convert_charrefs)
         self.reset()
         self.list_div = 0
+        self.res_menu = 0
         self.episode_list = []
+        self.resolution_list = {'jpn': {}, 'eng': {}}
         self.title_found = 0
 
     def handle_starttag(self, tag, attrs):
         if tag.lower()=='div':
             for i,j in attrs:
-                if i.lower() == 'id' and j.lower() == 'scrollarea':
-                    self.list_div = 1
+                if i.lower() == 'id':
+                    
+                    if j.lower() == 'resolutionmenu':
+                        self.res_menu = 1
+                    
+                    elif j.lower() == 'scrollarea':
+                        self.list_div = 1
+
 
         elif tag.lower() == 'a' and self.list_div:
             for i,j in attrs:
                 if i.lower() == 'href':
                     self.episode_list.append(j)
+
+        elif tag.lower() == 'button' and self.res_menu:
+            self.resolution_list[attrs[4][1]][attrs[3][1]] = attrs[1][1]
 
         elif tag.lower() == 'title':
             self.title_found = 1
