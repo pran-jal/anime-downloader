@@ -1,6 +1,6 @@
 import requests as r
 import re
-import heavenreader as heavenreader
+import readers.heavenpro as heavenreader
 
 def get(server):
     server_url = server.split('embed-')

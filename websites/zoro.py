@@ -1,8 +1,10 @@
 import sys
 sys.path.insert(1, "./")
 import requests as r
-from src.zororeader import reader
-from servers import streamtape
+
+from src.utils.downloader import download
+from src.readers.zoro import reader
+from src.servers import streamtape
 
 host = "https://zoro.to"
 episode_list_api = "https://zoro.to/ajax/v2/episode/list/"
@@ -55,7 +57,8 @@ def main(url = None):
                 # print(f"Error: {episodes_name_list[i]} streamtape link not found. Zoro currently supports streamtape server only")
                 print(server)
 
-    print(episodes)
+    dir_name = episodes[0]['title']
+    download(episodes, dir_name, referer=host)
 
 if __name__ == "__main__":
     main()

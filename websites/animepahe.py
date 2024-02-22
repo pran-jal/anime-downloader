@@ -9,13 +9,14 @@ from src.readers.pahe import reader
 from src.utils.titlecheck import validate
 
 headers = {
-    'referer': 'https://animepahe.com/',
+    'referer': 'https://animepahe.ru/',
     'origin': 'https://kwik.cx',
     'referer': 'https://kwik.cx/'
 }
 
 user_agent = {
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36'
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36',
+    'Cookie': 'res=1080; aud=jpn; laravel_session=eyJpdiI6IlYzbjNWSFhabTlYbFN5WjRyNmtxWHc9PSIsInZhbHVlIjoiM29HR1ZVWlBwUWVFK0hrbG8wOVMzV3NoVTdKZlpWSU5nb0dzczJ1cm1LaFBQUjZabkQvY1hxdU1ROHRvRFl5YldGbGNzYUhoV0hCRTlhWEFiK1NINkl6WlN0c2tJVFZWOWtsemtIZXluYmFzZmJEeW5QWXc4RnBuQ2w1UEJhV00iLCJtYWMiOiIwMjViYzcwMTg0ZTRlZGFkNTc3YjEyYWFmNDU4ZDlmOWUyYmE1Mjc1ZmU1ZDUxMTZhNTA3ZTI5MTJjYWUwMzQwIiwidGFnIjoiIn0^%^3D',
 }
 
 
@@ -64,7 +65,7 @@ def season_key(url):
 
 def all_epi_url_from_api(url):         # this can bypass the use of pahereader, may be faster
     season_id = season_key(url)
-    api_url = f"https://animepahe.com/api?m=release&id={season_id.split('?')[0]}&sort=episode_asc&"
+    api_url = f"https://animepahe.ru/api?m=release&id={season_id.split('?')[0]}&sort=episode_asc&"
     session_ids = {}
     page="page=1"
     
@@ -72,6 +73,10 @@ def all_epi_url_from_api(url):         # this can bypass the use of pahereader, 
         page = page.split('?').pop()
         print(api_url + page)
         session_ids_json = r.get(api_url + page, headers=user_agent)
+
+        if session_ids_json.status_code != 200:
+            raise Exception("Episodes URL fetch failed")
+        
         session_ids_json = session_ids_json.json()
         page = session_ids_json["next_page_url"]
         data = session_ids_json["data"]
@@ -96,7 +101,7 @@ def embeds_seperate(json_data):
 
 
 def get_embed_urls(url):
-    episode_page = r.get(url).text
+    episode_page = r.get(url, headers=user_agent).text
     read = reader()
     read.feed(episode_page)
     read.close()
@@ -113,7 +118,7 @@ def main(url = None):
     for id in sessions:
         print("getting link: ", id)
         episode = {}
-        episode["url"] = f'https://animepahe.com/play/{season_id}/{sessions[id]}'
+        episode["url"] = f'https://animepahe.ru/play/{season_id}/{sessions[id]}'
         
         embed_urls = get_embed_urls(episode['url'])['jpn']
 
@@ -141,8 +146,13 @@ def main(url = None):
 
     print("Required files Ready............")
     print("Downloading to {0}\n".format(dir_name))
+
     download(episodes, dir_name, referer)
 
 if __name__ == "__main__":
-    # main("https://animepahe.com/anime/d11b2a1a-64af-7a38-d006-67d87cf34b2b")
+    # https://animepahe.ru/anime/16fcd4e3-fa59-85b0-57cf-f1c28ff3e0d4
+    # https://animepahe.ru/anime/203d1657-a85b-daab-a169-ff5ecb0b14fa
+    # https://animepahe.ru/anime/f2bd56b5-2e02-ac22-44f6-85afdd0f42a1
+    # https://animepahe.ru/anime/b9acebfe-ca23-12c8-50b6-4d43af3010dc
+    # https://animepahe.ru/anime/24fdcd85-eb50-1175-9e34-a44f3d5da7a8
     main()
