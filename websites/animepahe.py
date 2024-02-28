@@ -9,14 +9,18 @@ from src.readers.pahe import reader
 from src.utils.titlecheck import validate
 
 headers = {
-    'referer': 'https://animepahe.ru/',
-    'origin': 'https://kwik.cx',
-    'referer': 'https://kwik.cx/'
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36',
+    'Accept': '*/*',
+    'Cookie': 'cf_clearance=uaBM.E5xHkoWKGzEAoxPfC46yCN2oSUlXNHAt1tYNck-1705145388-0-2-8471a20e.fc3293ae.d4b3d68f-0.2.1705145388; __ddgid_=ZouCeyh7ilQrjgQX; __ddg2_=weJsH1HcawaLxXZo; __ddg1_=i66CePRuMJ7DKMrGZYnH; res=1080; aud=jpn; av1=0; XSRF-TOKEN=eyJpdiI6ImZabTc4d0JjMmE1M3MvekNCZStURXc9PSIsInZhbHVlIjoia2RYcXZUSWMzR09tU2xlTnJjcnFidVd3S2VST1pMcWRkY3dtdnJiMlhEUEIzUmdGSEozSUkxK2puRnpVVFJIMVlDaXBhb0VoSXZDRzRJL0JLYzBFSEkwL1MwdTBrcCtQN1Y5dmczYlZJOXRPc0Vxd1ZHbkFRaVczYXlsWnllNFIiLCJtYWMiOiJmMmUzMzEzMDAxMzIwNmQyZjBhY2QyYzc0MWZiMDhkZDUwNjkwODkwNDAzNzM0MjgxMzBmODVkMDYxYTZiOWJlIiwidGFnIjoiIn0^%^3D; laravel_session=eyJpdiI6IjhJdzMzdVB3R0Y4ZXNwYjVBMHZJcUE9PSIsInZhbHVlIjoiZmdDOEV6K3hrclVnRU5NQmZHZlF0NGZpL0xGMXJEZ2JnbXlOdHdCUVQxZlpweCtnaGR0OG1vY2prUC9nUlBZaHVVWlYwMHFRS2FmRHFpTllGS1Bocm9RUWNPR3FWcGd2MCtwOHFzR1o4dXZqVDRscGhYN25zNlZtTWx2ajZFSjIiLCJtYWMiOiIzOGZmMjkwN2U0MmVlM2JhMTAxNDBiN2YxYzkwMDVhNzI2ZjJlMzM5YWU5YjU1YmQ0NDM5YWFhNDk3MDcwZTFkIiwidGFnIjoiIn0^%^3D; SERVERID=janna; XSRF-TOKEN=eyJpdiI6IngvYkdhREw4OWdHeGhoV0NBMjNZMmc9PSIsInZhbHVlIjoiVHBkQ2d3WHN3Mkc4cUExc01qS1VXcWxVZWNIUXBEcjFsYW0wUkp6L2NXVUZqMU9hK2J6T005RUwza0xtY0Z5VkU5bU5FQ2l1M1JocW1FWVBzRjFjT0JEM0dIY1g3WmNJSS9rN0d4ZGhobER5UXZyTXB0UHlUZXppKzZ5ZU9rUjUiLCJtYWMiOiI1YTgxODBjNTRmYWYyZWEwMDgyZmY3ZjJhNWM2MGU2MGQ4OGU5ODY1MWI2OTJhY2Q1ZTdiN2YxMjk5ZWJmZTZkIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IjJIZXpxN1lqVEk5c2xGTUx4aVZJNGc9PSIsInZhbHVlIjoiMDJDWUxneDRMR2tzT2VGREVMWUZXWDI0Zml0aStDeGpESWVHUDlXOHNaVWZVSEI2N1orQ1NoK3NLV3VZeGNXdGlXTlNlRlRYcjRuaWwyVzhHOURXYmFibDRlT21vY0o3RW5EdEp2ajJFcGdLU01HVlAzbmZYRVpMQitWQk5BKzEiLCJtYWMiOiJjODdjNjJlMWEwMGY4OGY3MjY3MTg0ODQ4Njk4OTA3ODcyNzcxN2ZiN2FmMDFiNzFhZGE5ZmVmODk5NmUyYTg1IiwidGFnIjoiIn0%3D',
+    'Host': 'animepahe.ru'
 }
 
-user_agent = {
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36',
-    'Cookie': 'res=1080; aud=jpn; laravel_session=eyJpdiI6IlYzbjNWSFhabTlYbFN5WjRyNmtxWHc9PSIsInZhbHVlIjoiM29HR1ZVWlBwUWVFK0hrbG8wOVMzV3NoVTdKZlpWSU5nb0dzczJ1cm1LaFBQUjZabkQvY1hxdU1ROHRvRFl5YldGbGNzYUhoV0hCRTlhWEFiK1NINkl6WlN0c2tJVFZWOWtsemtIZXluYmFzZmJEeW5QWXc4RnBuQ2w1UEJhV00iLCJtYWMiOiIwMjViYzcwMTg0ZTRlZGFkNTc3YjEyYWFmNDU4ZDlmOWUyYmE1Mjc1ZmU1ZDUxMTZhNTA3ZTI5MTJjYWUwMzQwIiwidGFnIjoiIn0^%^3D',
+kwik_headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36',
+    'Accept': '*/*',
+    'Cookie': 'cf_clearance=uaBM.E5xHkoWKGzEAoxPfC46yCN2oSUlXNHAt1tYNck-1705145388-0-2-8471a20e.fc3293ae.d4b3d68f-0.2.1705145388; __ddgid_=ZouCeyh7ilQrjgQX; __ddg2_=weJsH1HcawaLxXZo; __ddg1_=i66CePRuMJ7DKMrGZYnH; res=1080; aud=jpn; av1=0; XSRF-TOKEN=eyJpdiI6ImZabTc4d0JjMmE1M3MvekNCZStURXc9PSIsInZhbHVlIjoia2RYcXZUSWMzR09tU2xlTnJjcnFidVd3S2VST1pMcWRkY3dtdnJiMlhEUEIzUmdGSEozSUkxK2puRnpVVFJIMVlDaXBhb0VoSXZDRzRJL0JLYzBFSEkwL1MwdTBrcCtQN1Y5dmczYlZJOXRPc0Vxd1ZHbkFRaVczYXlsWnllNFIiLCJtYWMiOiJmMmUzMzEzMDAxMzIwNmQyZjBhY2QyYzc0MWZiMDhkZDUwNjkwODkwNDAzNzM0MjgxMzBmODVkMDYxYTZiOWJlIiwidGFnIjoiIn0^%^3D; laravel_session=eyJpdiI6IjhJdzMzdVB3R0Y4ZXNwYjVBMHZJcUE9PSIsInZhbHVlIjoiZmdDOEV6K3hrclVnRU5NQmZHZlF0NGZpL0xGMXJEZ2JnbXlOdHdCUVQxZlpweCtnaGR0OG1vY2prUC9nUlBZaHVVWlYwMHFRS2FmRHFpTllGS1Bocm9RUWNPR3FWcGd2MCtwOHFzR1o4dXZqVDRscGhYN25zNlZtTWx2ajZFSjIiLCJtYWMiOiIzOGZmMjkwN2U0MmVlM2JhMTAxNDBiN2YxYzkwMDVhNzI2ZjJlMzM5YWU5YjU1YmQ0NDM5YWFhNDk3MDcwZTFkIiwidGFnIjoiIn0^%^3D; SERVERID=janna; XSRF-TOKEN=eyJpdiI6IngvYkdhREw4OWdHeGhoV0NBMjNZMmc9PSIsInZhbHVlIjoiVHBkQ2d3WHN3Mkc4cUExc01qS1VXcWxVZWNIUXBEcjFsYW0wUkp6L2NXVUZqMU9hK2J6T005RUwza0xtY0Z5VkU5bU5FQ2l1M1JocW1FWVBzRjFjT0JEM0dIY1g3WmNJSS9rN0d4ZGhobER5UXZyTXB0UHlUZXppKzZ5ZU9rUjUiLCJtYWMiOiI1YTgxODBjNTRmYWYyZWEwMDgyZmY3ZjJhNWM2MGU2MGQ4OGU5ODY1MWI2OTJhY2Q1ZTdiN2YxMjk5ZWJmZTZkIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IjJIZXpxN1lqVEk5c2xGTUx4aVZJNGc9PSIsInZhbHVlIjoiMDJDWUxneDRMR2tzT2VGREVMWUZXWDI0Zml0aStDeGpESWVHUDlXOHNaVWZVSEI2N1orQ1NoK3NLV3VZeGNXdGlXTlNlRlRYcjRuaWwyVzhHOURXYmFibDRlT21vY0o3RW5EdEp2ajJFcGdLU01HVlAzbmZYRVpMQitWQk5BKzEiLCJtYWMiOiJjODdjNjJlMWEwMGY4OGY3MjY3MTg0ODQ4Njk4OTA3ODcyNzcxN2ZiN2FmMDFiNzFhZGE5ZmVmODk5NmUyYTg1IiwidGFnIjoiIn0%3D',
+    'Referer': 'https://animepahe.ru/'
+
 }
 
 
@@ -55,12 +59,23 @@ def all_epi_url(url):
     return session_ids
 
 
+def embeds_seperate(json_data):
+    """ Depricated. to avoid use of "eval" """
+    eng = {}
+    jpn = {}
+
+    for item in json_data:
+        for key, value in item.items():
+            eval(value["audio"])[key] = value["kwik"]
+        
+    return jpn
+
+
 def season_key(url):
     url = url.split('/')
     if len(url)<5:
         raise ValueError("season_id Not Found. Invalid URL")
     return url[4]
-
 
 
 def all_epi_url_from_api(url):         # this can bypass the use of pahereader, may be faster
@@ -72,7 +87,7 @@ def all_epi_url_from_api(url):         # this can bypass the use of pahereader, 
     while page:
         page = page.split('?').pop()
         print(api_url + page)
-        session_ids_json = r.get(api_url + page, headers=user_agent)
+        session_ids_json = r.get(api_url + page, headers=headers)
 
         if session_ids_json.status_code != 200:
             raise Exception("Episodes URL fetch failed")
@@ -86,22 +101,9 @@ def all_epi_url_from_api(url):         # this can bypass the use of pahereader, 
     return session_ids
 
 
-
-def embeds_seperate(json_data):
-    """ Depricated """
-    eng = {}
-    jpn = {}
-
-    for item in json_data:
-        print(item)
-        for key, value in item.items():
-            eval(value["audio"])[key] = value["kwik"]
-        
-    return jpn
-
-
 def get_embed_urls(url):
-    episode_page = r.get(url, headers=user_agent).text
+
+    episode_page = r.get(url, headers=headers).text
     read = reader()
     read.feed(episode_page)
     read.close()
@@ -123,7 +125,7 @@ def main(url = None):
         embed_urls = get_embed_urls(episode['url'])['jpn']
 
         # .pop() the last value is the data of the best resolution.
-        embed_page = r.get(embed_urls["1080"], headers=headers).text
+        embed_page = r.get(embed_urls["1080"], headers=kwik_headers).text
         read = reader()
         read.feed(embed_page)
         episode["title"] = read.title.split(".mp4")[0]
