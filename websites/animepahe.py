@@ -152,9 +152,4 @@ def main(url = None):
     download(episodes, dir_name, referer)
 
 if __name__ == "__main__":
-    # https://animepahe.ru/anime/16fcd4e3-fa59-85b0-57cf-f1c28ff3e0d4
-    # https://animepahe.ru/anime/203d1657-a85b-daab-a169-ff5ecb0b14fa
-    # https://animepahe.ru/anime/f2bd56b5-2e02-ac22-44f6-85afdd0f42a1
-    # https://animepahe.ru/anime/b9acebfe-ca23-12c8-50b6-4d43af3010dc
-    # https://animepahe.ru/anime/24fdcd85-eb50-1175-9e34-a44f3d5da7a8
     main()

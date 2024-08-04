@@ -1,6 +1,6 @@
 import os
-from ffmpeg import ffmpeg_downloader as ffmpeg
-from curl import curl_downloader as curl
+from src.utils.ffmpeg import ffmpeg_downloader as ffmpeg
+from src.utils.curl import curl_downloader as curl
 
 def download(episodes: list, dir_name, referer, use = None):
     if os.path.exists(dir_name):

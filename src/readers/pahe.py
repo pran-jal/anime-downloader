@@ -1,4 +1,3 @@
-from collections import defaultdict
 from html.parser import HTMLParser as parser
 
 class reader(parser):
@@ -8,7 +7,7 @@ class reader(parser):
         self.list_div = 0
         self.res_menu = 0
         self.episode_list = []
-        self.resolution_list = {'jpn': {}, 'eng': {}}
+        self.resolution_list = {'jpn': {}, 'eng': {}, "chi": {}}
         self.title_found = 0
 
     def handle_starttag(self, tag, attrs):
